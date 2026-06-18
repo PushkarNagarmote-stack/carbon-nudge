@@ -14,7 +14,7 @@ function ForgotPassword({ onBack }) {
     if (!email.trim() || !email.includes("@")) { setError("Please enter a valid email."); return; }
     setLoading(true);
     try {
-      const res = await fetch("http://127.0.0.1:5000/api/find-account", {
+      const res = await fetch("https://carbon-nudge.onrender.com/api/find-account", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email })
@@ -34,7 +34,7 @@ function ForgotPassword({ onBack }) {
     if (newPassword !== confirmPassword) { setError("Passwords don't match."); return; }
     setLoading(true);
     try {
-      const res = await fetch("http://127.0.0.1:5000/api/reset-password", {
+      const res = await fetch("https://carbon-nudge.onrender.com/api/reset-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, new_password: newPassword })

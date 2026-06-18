@@ -24,7 +24,7 @@ function Tips({ log, totalCo2 }) {
       : "The user hasn't logged any activities yet.";
 
     try {
-      const response = await fetch("http://127.0.0.1:5000/api/tips", {
+      const response = await fetch("https://carbon-nudge.onrender.com/api/tips", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ context })

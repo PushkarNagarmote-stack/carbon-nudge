@@ -111,7 +111,7 @@ function App() {
     if (page !== "dashboard") return;
     const user = JSON.parse(localStorage.getItem("cn_current_user") || "{}");
     if (!user.email) return;
-    axios.get(`http://127.0.0.1:5000/api/log?user_email=${user.email}`)
+    axios.get(`https://carbon-nudge.onrender.com/api/log?user_email=${user.email}`)
       .then(res => {
         const activities = res.data.activities.map(a => ({
           ...a,
@@ -129,7 +129,7 @@ function App() {
     setLoading(true); setResult(null);
     try {
       const user = JSON.parse(localStorage.getItem("cn_current_user") || "{}");
-      const res = await axios.post("http://127.0.0.1:5000/api/calculate", {
+      const res = await axios.post("https://carbon-nudge.onrender.com/api/calculate", {
         category, item, quantity: parseFloat(quantity), user_email: user.email || "guest"
       });
       setResult(res.data);
@@ -143,7 +143,7 @@ function App() {
   const handleClearLog = async () => {
     const user = JSON.parse(localStorage.getItem("cn_current_user") || "{}");
     try {
-      await axios.post("http://127.0.0.1:5000/api/reset", { user_email: user.email || "guest" });
+      await axios.post("https://carbon-nudge.onrender.com/api/reset", { user_email: user.email || "guest" });
       setLog([]);
       setTotalCo2(0);
       setStreak(0);
