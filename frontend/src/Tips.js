@@ -5,14 +5,14 @@ function Tips({ log, totalCo2 }) {
   const [aiTips, setAiTips] = useState(null);
   const [error, setError] = useState("");
 
-  const staticTips = [
-    { icon: "🚲", color: "#4edea3", title: "Cycle Short Distances", desc: "Replacing car trips under 5km with cycling saves ~1.2 kg CO₂ per trip." },
-    { icon: "🥗", color: "#ff9f43", title: "Try Meatless Mondays", desc: "One plant-based day per week can save up to 52 kg CO₂ per year." },
-    { icon: "💡", color: "#ffd32a", title: "Switch to LED Bulbs", desc: "LEDs use 75% less energy than incandescent bulbs and last 25x longer." },
-    { icon: "🧺", color: "#54a0ff", title: "Wash Clothes in Cold Water", desc: "90% of a washing machine's energy goes to heating water. Go cold!" },
-    { icon: "🔌", color: "#ff6b6b", title: "Unplug Idle Devices", desc: "Standby power can account for 10% of your home electricity use." },
-    { icon: "🛒", color: "#a29bfe", title: "Buy Local Produce", desc: "Local food travels less distance, reducing transport emissions significantly." },
-  ];
+  // const staticTips = [
+//     { icon: "🚲", color: "#4edea3", title: "Cycle Short Distances", desc: "Replacing car trips under 5km with cycling saves ~1.2 kg CO₂ per trip." },
+//     { icon: "🥗", color: "#ff9f43", title: "Try Meatless Mondays", desc: "One plant-based day per week can save up to 52 kg CO₂ per year." },
+//     { icon: "💡", color: "#ffd32a", title: "Switch to LED Bulbs", desc: "LEDs use 75% less energy than incandescent bulbs and last 25x longer." },
+//     { icon: "🧺", color: "#54a0ff", title: "Wash Clothes in Cold Water", desc: "90% of a washing machine's energy goes to heating water. Go cold!" },
+//     { icon: "🔌", color: "#ff6b6b", title: "Unplug Idle Devices", desc: "Standby power can account for 10% of your home electricity use." },
+//     { icon: "🛒", color: "#a29bfe", title: "Buy Local Produce", desc: "Local food travels less distance, reducing transport emissions significantly." },
+// ];
 
   const getAiTips = async () => {
     setLoading(true);

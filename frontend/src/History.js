@@ -64,7 +64,7 @@ function History({ log, totalCo2 }) {
   const weeklyAvg = log.length > 0
     ? (weekData.reduce((a, b) => a + b.co2, 0) / 7).toFixed(1)
     : "0.0";
-  const monthlyCo2 = (parseFloat(weeklyAvg) * 30).toFixed(1);
+  // const monthlyCo2 = (parseFloat(weeklyAvg) * 30).toFixed(1);
 
   return (
     <>
