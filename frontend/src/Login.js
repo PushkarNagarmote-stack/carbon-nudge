@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 
-function Login({ onLogin, onGoSignup, onForgotPassword }) {
+function Login({
+  onLogin,
+  onGuestLogin,
+  onGoSignup,
+  onForgotPassword
+}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -100,6 +105,30 @@ function Login({ onLogin, onGoSignup, onForgotPassword }) {
           >
             Sign In
           </button>
+          <button
+  onClick={() =>
+    onGuestLogin({
+      name: "Demo User",
+      email: "guest@carbonnudge.demo",
+      joinedAt: new Date().toISOString()
+    })
+  }
+  style={{
+    width:"100%",
+    padding:"15px",
+    background:"transparent",
+    color:"#4edea3",
+    fontSize:"16px",
+    fontWeight:700,
+    border:"1px solid rgba(78,222,163,0.3)",
+    borderRadius:"12px",
+    cursor:"pointer",
+    marginTop:"12px",
+    fontFamily:"'Inter',sans-serif"
+  }}
+>
+  🚀 Try Demo Mode
+</button>
         </div>
 
         <p style={{ textAlign:"center", color:"rgba(187,202,191,0.6)", fontSize:"15px", marginTop:"24px" }}>

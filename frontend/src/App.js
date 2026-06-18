@@ -165,8 +165,35 @@ function App() {
   };
 
   // AUTH PAGES
-  if (page === "login") return <Login onLogin={(user) => { setCurrentUser(user); setPage("dashboard"); }} onGoSignup={() => setPage("signup")} onForgotPassword={() => setPage("forgot")} />;
-  if (page === "signup") return <Signup onSignup={(user) => { setPage("login"); }} onGoLogin={() => setPage("login")} />;
+  if (page === "login")
+  return (
+    <Login
+      onLogin={(user) => {
+        setCurrentUser(user);
+        setPage("dashboard");
+      }}
+      onGuestLogin={(guestUser) => {
+        localStorage.setItem(
+          "cn_current_user",
+          JSON.stringify(guestUser)
+        );
+        setCurrentUser(guestUser);
+        setPage("dashboard");
+      }}
+      onGoSignup={() => setPage("signup")}
+      onForgotPassword={() => setPage("forgot")}
+    />
+  );
+  if (page === "signup")
+  return (
+    <Signup
+      onSignup={(user) => {
+        setCurrentUser(user);
+        setPage("dashboard");
+      }}
+      onGoLogin={() => setPage("login")}
+    />
+  );
   if (page === "forgot") return (
   <div style={{ minHeight:'100vh', background:'#0A0A0A', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', padding:'24px', fontFamily:'Inter, sans-serif', position:'relative', overflow:'hidden' }}>
 
@@ -275,7 +302,7 @@ function App() {
                   </div>
                   <button className="calc-btn" onClick={handleCalculate} disabled={loading}>
                     {loading
-                      ? <><span className="material-symbols-outlined" style={{ fontSize:'20px' }}>progress_activity</span> Analyzing...</>
+                      ? <><span className="material-symbols-outlined" style={{ fontSize:'20px' }}>progress_activity</span> 🤖 AI is analyzing your carbon footprint...</>
                       : <><span className="material-symbols-outlined" style={{ fontSize:'20px' }}>calculate</span> Calculate My Impact</>}
                   </button>
                 </div>
