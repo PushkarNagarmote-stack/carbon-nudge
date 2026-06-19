@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function Signup({ onSignup, onGoLogin }) {
+function Signup({ onSignup, onGoLogin, onGoHome }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -37,10 +37,16 @@ function Signup({ onSignup, onGoLogin }) {
 
       <div style={{ width:"100%", maxWidth:"400px", position:"relative", zIndex:1 }}>
 
-        <button onClick={onGoLogin} style={{ display:"flex", alignItems:"center", gap:"6px", background:"none", border:"none", color:"rgba(187,202,191,0.6)", cursor:"pointer", fontFamily:"'Inter',sans-serif", fontSize:"13px", fontWeight:600, marginBottom:"32px", padding:0 }}>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="15 18 9 12 15 6"/></svg>
-          Back to Login
-        </button>
+        <div style={{ display:"flex", justifyContent:"space-between", marginBottom:"32px" }}>
+          <button onClick={onGoHome} style={{ display:"flex", alignItems:"center", gap:"6px", background:"none", border:"none", color:"rgba(187,202,191,0.6)", cursor:"pointer", fontFamily:"'Inter',sans-serif", fontSize:"13px", fontWeight:600, padding:0 }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+            Home
+          </button>
+          <button onClick={onGoLogin} style={{ display:"flex", alignItems:"center", gap:"6px", background:"none", border:"none", color:"rgba(187,202,191,0.6)", cursor:"pointer", fontFamily:"'Inter',sans-serif", fontSize:"13px", fontWeight:600, padding:0 }}>
+            Back to Login
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ transform:"rotate(180deg)" }}><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+        </div>
 
         <div style={{ textAlign:"center", marginBottom:"36px" }}>
           <div style={{ width:"72px", height:"72px", background:"rgba(78,222,163,0.1)", border:"1px solid rgba(78,222,163,0.25)", borderRadius:"20px", display:"flex", alignItems:"center", justifyContent:"center", margin:"0 auto 20px", boxShadow:"0 0 30px rgba(78,222,163,0.2)" }}>

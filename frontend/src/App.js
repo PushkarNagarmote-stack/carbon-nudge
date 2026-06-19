@@ -6,9 +6,12 @@ import History from "./History";
 import Tips from "./Tips";
 import Profile from "./Profile";
 import ForgotPassword from "./ForgotPassword";
+import Landing from "./Landing";
+import HowItWorks from "./HowItWorks";
+import Impact from "./Impact";
 
 function App() {
-  const [page, setPage] = useState("login");
+  const [page, setPage] = useState("landing");
   const [currentUser, setCurrentUser] = useState(null);
   const [category, setCategory] = useState("food");
   const [item, setItem] = useState("");
@@ -164,10 +167,40 @@ function App() {
     ));
   };
 
+  // LANDING / MARKETING PAGES
+  if (page === "landing")
+    return (
+      <Landing
+        onGoLogin={() => setPage("login")}
+        onGoSignup={() => setPage("signup")}
+        onGoHowItWorks={() => setPage("howitworks")}
+        onGoImpact={() => setPage("impact")}
+      />
+    );
+  if (page === "howitworks")
+    return (
+      <HowItWorks
+        onGoLogin={() => setPage("login")}
+        onGoSignup={() => setPage("signup")}
+        onGoLanding={() => setPage("landing")}
+        onGoImpact={() => setPage("impact")}
+      />
+    );
+  if (page === "impact")
+    return (
+      <Impact
+        onGoLogin={() => setPage("login")}
+        onGoSignup={() => setPage("signup")}
+        onGoLanding={() => setPage("landing")}
+        onGoHowItWorks={() => setPage("howitworks")}
+      />
+    );
+
   // AUTH PAGES
   if (page === "login")
   return (
     <Login
+      onGoHome={() => setPage("landing")}
       onLogin={(user) => {
         setCurrentUser(user);
         setPage("dashboard");
@@ -187,6 +220,7 @@ function App() {
   if (page === "signup")
   return (
     <Signup
+      onGoHome={() => setPage("landing")}
       onSignup={(user) => {
         setCurrentUser(user);
         setPage("dashboard");

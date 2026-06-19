@@ -4,7 +4,8 @@ function Login({
   onLogin,
   onGuestLogin,
   onGoSignup,
-  onForgotPassword
+  onForgotPassword,
+  onGoHome
 }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -36,6 +37,11 @@ function Login({
       <div style={{ position:"fixed", bottom:"-10%", left:"-5%", width:"30vw", height:"30vw", background:"rgba(5,102,217,0.06)", filter:"blur(100px)", borderRadius:"50%", pointerEvents:"none" }} />
 
       <div style={{ width:"100%", maxWidth:"400px", position:"relative", zIndex:1 }}>
+
+        <button onClick={onGoHome} style={{ display:"flex", alignItems:"center", gap:"6px", background:"none", border:"none", color:"rgba(187,202,191,0.6)", cursor:"pointer", fontFamily:"'Inter',sans-serif", fontSize:"13px", fontWeight:600, marginBottom:"24px", padding:0 }}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          Back to Home
+        </button>
 
         <div style={{ textAlign:"center", marginBottom:"40px" }}>
           <div style={{ width:"72px", height:"72px", background:"rgba(78,222,163,0.1)", border:"1px solid rgba(78,222,163,0.25)", borderRadius:"20px", display:"flex", alignItems:"center", justifyContent:"center", margin:"0 auto 20px", boxShadow:"0 0 30px rgba(78,222,163,0.2)" }}>
