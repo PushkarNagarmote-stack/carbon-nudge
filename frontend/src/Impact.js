@@ -67,7 +67,7 @@ function Impact({ onGoLogin, onGoSignup, onGoLanding, onGoHowItWorks }) {
               <div>
                 <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "12px" }}>
                   <span style={{ fontSize: "22px" }}>{c.icon}</span>
-                  <h3 style={{ fontSize: "18px", fontWeight: 700, color: "#fff" }}>{c.title}</h3>
+                  <h2 style={{ fontSize: "18px", fontWeight: 700, color: "#fff" }}>{c.title}</h2>
                 </div>
                 <p style={{ fontSize: "14px", color: "#bbcabf", lineHeight: 1.6 }}>{c.desc}</p>
               </div>

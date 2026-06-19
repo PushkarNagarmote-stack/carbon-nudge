@@ -66,8 +66,8 @@ function Landing({ onGoLogin, onGoSignup, onGoHowItWorks, onGoImpact }) {
         {/* Features */}
         <section style={{ padding: "100px 24px", maxWidth: "1280px", margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: "64px" }}>
-            <h2 style={{ color: "#4edea3", fontSize: "13px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.3em", marginBottom: "16px" }}>Core Technology</h2>
-            <h3 style={{ fontSize: "clamp(28px,4vw,40px)", color: "#fff", fontWeight: 800, marginBottom: "20px", letterSpacing: "-0.02em" }}>Engineered for Impact</h3>
+            <p style={{ color: "#4edea3", fontSize: "13px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.3em", marginBottom: "16px" }}>Core Technology</p>
+            <h2 style={{ fontSize: "clamp(28px,4vw,40px)", color: "#fff", fontWeight: 800, marginBottom: "20px", letterSpacing: "-0.02em" }}>Engineered for Impact</h2>
             <div style={{ height: "4px", width: "80px", background: "#4edea3", margin: "0 auto", borderRadius: "999px" }} />
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px,1fr))", gap: "24px" }}>
@@ -79,7 +79,7 @@ function Landing({ onGoLogin, onGoSignup, onGoHowItWorks, onGoImpact }) {
               <div key={i} className="ln-glass ln-glow-border" style={{ padding: "40px", borderRadius: "32px", transition: "all 0.3s", display: "flex", flexDirection: "column", gap: "24px" }}>
                 <div style={{ width: "56px", height: "56px", borderRadius: "16px", background: "rgba(78,222,163,0.1)", border: "1px solid rgba(78,222,163,0.2)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "26px" }}>{f.icon}</div>
                 <div>
-                  <h4 style={{ fontSize: "22px", color: "#fff", fontWeight: 800, marginBottom: "12px" }}>{f.title}</h4>
+                  <h3 style={{ fontSize: "22px", color: "#fff", fontWeight: 800, marginBottom: "12px" }}>{f.title}</h3>
                   <p style={{ color: "#bbcabf", lineHeight: 1.7 }}>{f.desc}</p>
                 </div>
               </div>

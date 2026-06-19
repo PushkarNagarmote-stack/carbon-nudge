@@ -30,7 +30,7 @@ function HowItWorks({ onGoLogin, onGoSignup, onGoLanding, onGoImpact }) {
     <div className="hiw-glass hiw-glow-border" style={{ padding: "24px", borderRadius: "16px", transition: "all 0.3s" }}>
       <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "16px" }}>
         <span style={{ fontSize: "26px" }}>{icon}</span>
-        <h4 style={{ fontSize: "20px", fontWeight: 700, color: "#fff" }}>{title}</h4>
+        <h3 style={{ fontSize: "20px", fontWeight: 700, color: "#fff" }}>{title}</h3>
       </div>
       <div>
         {rows.map(([name, val, unit], i) => (
@@ -89,7 +89,7 @@ function HowItWorks({ onGoLogin, onGoSignup, onGoLanding, onGoImpact }) {
             {steps.map((s) => (
               <div key={s.n} style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center" }}>
                 <div style={{ width: "64px", height: "64px", borderRadius: "50%", background: "#4edea3", color: "#003824", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 800, fontSize: "20px", marginBottom: "16px", boxShadow: "0 0 20px rgba(78,222,163,0.4)" }}>{s.n}</div>
-                <h3 style={{ fontSize: "16px", fontWeight: 700, color: "#fff", marginBottom: "8px" }}>{s.icon} {s.title}</h3>
+                <h2 style={{ fontSize: "16px", fontWeight: 700, color: "#fff", marginBottom: "8px" }}>{s.icon} {s.title}</h2>
                 <p style={{ fontSize: "14px", color: "#bbcabf", lineHeight: 1.5 }}>{s.desc}</p>
               </div>
             ))}

@@ -412,7 +412,7 @@ function App() {
                 <div className="glass" style={{ flex:1 }}>
                   <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'16px' }}>
                     <h2 style={{ fontSize:'20px', fontWeight:700 }}>Recent Logs</h2>
-                    {log.length > 0 && <span className="badge" style={{ background:'rgba(78,222,163,0.1)', color:'#4edea3', border:'1px solid rgba(78,222,163,0.2)', cursor:'pointer' }} onClick={handleClearLog}>Clear</span>}
+                    {log.length > 0 && <button className="badge" aria-label="Clear activity log" style={{ background:'rgba(78,222,163,0.1)', color:'#4edea3', border:'1px solid rgba(78,222,163,0.2)', cursor:'pointer' }} onClick={handleClearLog}>Clear</button>}
                   </div>
                   {log.length === 0 ? (
                     <div style={{ textAlign:'center', padding:'32px 0', color:'#bbcabf' }}>
