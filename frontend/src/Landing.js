@@ -13,6 +13,7 @@ function Landing({ onGoLogin, onGoSignup, onGoHowItWorks, onGoImpact }) {
         .ln-nav-link::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px; background-color: #4edea3; transition: width 0.3s ease; }
         .ln-nav-link:hover::after { width: 100%; }
         .ln-bg-glow { background: radial-gradient(circle at 50% 50%, rgba(78,222,163,0.08) 0%, transparent 70%); }
+@media (max-width: 768px) { .ln-nav-desktop { display: none !important; } }
       `}</style>
 
       {/* Nav */}
@@ -22,7 +23,7 @@ function Landing({ onGoLogin, onGoSignup, onGoHowItWorks, onGoImpact }) {
             <div style={{ width: "32px", height: "32px", borderRadius: "10px", background: "rgba(78,222,163,0.2)", border: "1px solid rgba(78,222,163,0.3)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "16px" }}>🌿</div>
             <span style={{ fontSize: "20px", fontWeight: 800, color: "#fff", letterSpacing: "-0.02em" }}>Carbon Nudge</span>
           </div>
-          <div style={{ display: "flex", gap: "40px", alignItems: "center" }} className="ln-nav-desktop">
+          <div style={{ display: "flex", gap: "40px", alignItems: "center" }} className="ln-nav-desktop" aria-hidden="true">
             <button className="ln-nav-link" style={{ color: "#fff", fontWeight: 600, fontSize: "14px" }}>Features</button>
             <button className="ln-nav-link" style={{ color: "#bbcabf", fontWeight: 600, fontSize: "14px" }} onClick={onGoHowItWorks}>How it Works</button>
             <button className="ln-nav-link" style={{ color: "#bbcabf", fontWeight: 600, fontSize: "14px" }} onClick={onGoImpact}>Impact</button>
