@@ -51,13 +51,13 @@ function HowItWorks({ onGoLogin, onGoSignup, onGoLanding, onGoImpact }) {
         .hiw-glow-border:hover { border-color: rgba(78,222,163,0.4); box-shadow: 0 0 20px rgba(78,222,163,0.1); transform: translateY(-4px); }
         .hiw-nav-link { background: none; border: none; cursor: pointer; font-family: 'Inter',sans-serif; }
         .hiw-corner-glow { position: fixed; width: 40vw; height: 40vw; border-radius: 50%; pointer-events: none; z-index: 0; }
-@media (max-width: 768px) { .hiw-nav-links { display: none !important; } }
+        @media (max-width: 768px) { .hiw-nav-links { display: none !important; } }
+        @media (min-width: 769px) { .hiw-hamburger { display: none !important; } }
       `}</style>
 
       <div className="hiw-corner-glow" style={{ top: "-10vw", left: "-10vw", background: "radial-gradient(circle, rgba(78,222,163,0.08) 0%, transparent 70%)" }} />
       <div className="hiw-corner-glow" style={{ bottom: "-10vw", right: "-10vw", background: "radial-gradient(circle, rgba(78,222,163,0.08) 0%, transparent 70%)" }} />
 
-      {/* Nav */}
       <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 50, background: "rgba(10,10,10,0.8)", backdropFilter: "blur(24px)", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
         <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 24px", height: "64px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <button className="hiw-nav-link" onClick={onGoLanding} style={{ fontSize: "20px", fontWeight: 800, color: "#4edea3" }}>Carbon Nudge</button>
@@ -67,14 +67,19 @@ function HowItWorks({ onGoLogin, onGoSignup, onGoLanding, onGoImpact }) {
             <button className="hiw-nav-link" onClick={onGoImpact} style={{ color: "#bbcabf", fontWeight: 600, fontSize: "14px" }}>Impact</button>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+            <button className="hiw-hamburger" aria-label="Open menu" onClick={() => { const m = document.getElementById('hiw-mobile-menu'); m.style.display = m.style.display === 'flex' ? 'none' : 'flex'; }} style={{ background: "none", border: "1px solid rgba(255,255,255,0.15)", borderRadius: "8px", color: "#fff", fontSize: "20px", cursor: "pointer", padding: "4px 10px", fontFamily: "'Inter',sans-serif" }}>☰</button>
             <button onClick={onGoLogin} className="hiw-nav-link" style={{ padding: "8px 20px", borderRadius: "999px", border: "1px solid rgba(255,255,255,0.1)", color: "#fff", fontSize: "13px", fontWeight: 600 }}>Login</button>
             <button onClick={onGoSignup} className="hiw-nav-link" style={{ padding: "8px 20px", borderRadius: "999px", background: "#4edea3", color: "#003824", fontSize: "13px", fontWeight: 700, boxShadow: "0 0 20px rgba(78,222,163,0.4)" }}>Get Started</button>
           </div>
         </div>
+        <div id="hiw-mobile-menu" style={{ display: "none", flexDirection: "column", background: "rgba(10,10,10,0.95)", borderTop: "1px solid rgba(255,255,255,0.07)", padding: "16px 24px", gap: "16px" }}>
+          <button className="hiw-nav-link" onClick={onGoLanding} style={{ color: "#bbcabf", fontWeight: 600, fontSize: "15px", textAlign: "left" }}>Features</button>
+          <button className="hiw-nav-link" style={{ color: "#4edea3", fontWeight: 700, fontSize: "15px", textAlign: "left" }}>How it Works</button>
+          <button className="hiw-nav-link" onClick={onGoImpact} style={{ color: "#bbcabf", fontWeight: 600, fontSize: "15px", textAlign: "left" }}>Impact</button>
+        </div>
       </nav>
 
       <main style={{ position: "relative", zIndex: 1, paddingTop: "128px", paddingBottom: "48px", maxWidth: "1280px", margin: "0 auto", padding: "128px 24px 48px" }}>
-        {/* Hero */}
         <section style={{ textAlign: "center", marginBottom: "64px" }}>
           <h1 style={{ fontSize: "clamp(32px,5vw,48px)", fontWeight: 800, marginBottom: "16px", letterSpacing: "-0.02em" }}>
             The science of <span style={{ color: "#4edea3" }}>sustainability</span>.
@@ -84,7 +89,6 @@ function HowItWorks({ onGoLogin, onGoSignup, onGoLanding, onGoImpact }) {
           </p>
         </section>
 
-        {/* Steps */}
         <section style={{ marginBottom: "100px" }}>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px,1fr))", gap: "24px" }}>
             {steps.map((s) => (
@@ -97,7 +101,6 @@ function HowItWorks({ onGoLogin, onGoSignup, onGoLanding, onGoImpact }) {
           </div>
         </section>
 
-        {/* Emission Factors */}
         <section style={{ marginBottom: "80px" }}>
           <h2 style={{ fontSize: "24px", fontWeight: 700, marginBottom: "24px", borderLeft: "4px solid #4edea3", paddingLeft: "16px" }}>Our Emission Factors</h2>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px,1fr))", gap: "24px" }}>
@@ -107,7 +110,6 @@ function HowItWorks({ onGoLogin, onGoSignup, onGoLanding, onGoImpact }) {
           </div>
         </section>
 
-        {/* Callout */}
         <section style={{ maxWidth: "900px", margin: "0 auto 48px" }}>
           <div className="hiw-glass" style={{ padding: "32px", borderRadius: "20px", borderLeft: "6px solid #4edea3", display: "flex", flexWrap: "wrap", alignItems: "center", gap: "24px" }}>
             <div style={{ textAlign: "center", minWidth: "140px" }}>

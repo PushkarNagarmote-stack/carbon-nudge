@@ -11,10 +11,10 @@ function Impact({ onGoLogin, onGoSignup, onGoLanding, onGoHowItWorks }) {
         .imp-nav-link { background: none; border: none; cursor: pointer; font-family: 'Inter',sans-serif; }
         .imp-card:hover { background: rgba(255,255,255,0.05); transform: translateY(-4px); }
         .imp-card { transition: all 0.3s; }
-@media (max-width: 768px) { .imp-nav-links { display: none !important; } }
+        @media (max-width: 768px) { .imp-nav-links { display: none !important; } }
+        @media (min-width: 769px) { .imp-hamburger { display: none !important; } }
       `}</style>
 
-      {/* Nav */}
       <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 50, background: "rgba(10,10,10,0.8)", backdropFilter: "blur(24px)", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
         <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 24px", height: "64px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <button className="imp-nav-link" onClick={onGoLanding} style={{ fontSize: "20px", fontWeight: 800, color: "#4edea3" }}>Carbon Nudge</button>
@@ -24,14 +24,19 @@ function Impact({ onGoLogin, onGoSignup, onGoLanding, onGoHowItWorks }) {
             <button className="imp-nav-link" style={{ color: "#4edea3", fontWeight: 700, fontSize: "14px", borderBottom: "2px solid #4edea3", paddingBottom: "4px" }}>Impact</button>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+            <button className="imp-hamburger" aria-label="Open menu" onClick={() => { const m = document.getElementById('imp-mobile-menu'); m.style.display = m.style.display === 'flex' ? 'none' : 'flex'; }} style={{ background: "none", border: "1px solid rgba(255,255,255,0.15)", borderRadius: "8px", color: "#fff", fontSize: "20px", cursor: "pointer", padding: "4px 10px", fontFamily: "'Inter',sans-serif" }}>☰</button>
             <button onClick={onGoLogin} className="imp-nav-link" style={{ padding: "8px 20px", borderRadius: "999px", border: "1px solid rgba(255,255,255,0.1)", color: "#fff", fontSize: "13px", fontWeight: 600 }}>Login</button>
             <button onClick={onGoSignup} className="imp-nav-link" style={{ padding: "8px 20px", borderRadius: "999px", background: "#4edea3", color: "#003824", fontSize: "13px", fontWeight: 700, boxShadow: "0 0 20px rgba(78,222,163,0.4)" }}>Get Started</button>
           </div>
         </div>
+        <div id="imp-mobile-menu" style={{ display: "none", flexDirection: "column", background: "rgba(10,10,10,0.95)", borderTop: "1px solid rgba(255,255,255,0.07)", padding: "16px 24px", gap: "16px" }}>
+          <button className="imp-nav-link" onClick={onGoLanding} style={{ color: "#bbcabf", fontWeight: 600, fontSize: "15px", textAlign: "left" }}>Features</button>
+          <button className="imp-nav-link" onClick={onGoHowItWorks} style={{ color: "#bbcabf", fontWeight: 600, fontSize: "15px", textAlign: "left" }}>How it Works</button>
+          <button className="imp-nav-link" style={{ color: "#4edea3", fontWeight: 700, fontSize: "15px", textAlign: "left" }}>Impact</button>
+        </div>
       </nav>
 
       <main style={{ paddingTop: "128px", paddingBottom: "48px", maxWidth: "1280px", margin: "0 auto", padding: "128px 24px 48px" }}>
-        {/* Header */}
         <section style={{ marginBottom: "48px" }}>
           <h1 style={{ fontSize: "clamp(32px,5vw,48px)", fontWeight: 800, marginBottom: "16px", position: "relative", display: "inline-block" }}>
             Impact
@@ -42,7 +47,6 @@ function Impact({ onGoLogin, onGoSignup, onGoLanding, onGoHowItWorks }) {
           </p>
         </section>
 
-        {/* Stat cards */}
         <section style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px,1fr))", gap: "24px", marginBottom: "48px" }}>
           {[
             { icon: "🌍", value: "4.5 kg", label: "Global average daily CO\u2082 per person" },
@@ -57,7 +61,6 @@ function Impact({ onGoLogin, onGoSignup, onGoLanding, onGoHowItWorks }) {
           ))}
         </section>
 
-        {/* Comparison cards */}
         <section style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px,1fr))", gap: "24px", marginBottom: "48px" }}>
           {[
             { icon: "🌳", title: "The Tree Offset", desc: "1 tree absorbs ~21 kg CO\u2082 per year. Skipping beef once a week for a year saves the equivalent of planting 66 trees.", tag: "Biological Equivalent" },
@@ -79,7 +82,6 @@ function Impact({ onGoLogin, onGoSignup, onGoLanding, onGoHowItWorks }) {
           ))}
         </section>
 
-        {/* Collective power banner */}
         <section style={{ marginBottom: "48px" }}>
           <div className="imp-glass" style={{ padding: "40px", borderRadius: "20px", border: "1px solid rgba(78,222,163,0.2)", display: "flex", flexWrap: "wrap", alignItems: "center", gap: "32px" }}>
             <div style={{ flex: "2", minWidth: "260px" }}>
@@ -94,7 +96,6 @@ function Impact({ onGoLogin, onGoSignup, onGoLanding, onGoHowItWorks }) {
           </div>
         </section>
 
-        {/* Where do you sit today */}
         <section className="imp-glass" style={{ padding: "40px", borderRadius: "20px", marginBottom: "48px" }}>
           <h3 style={{ fontSize: "20px", fontWeight: 700, textAlign: "center", marginBottom: "48px" }}>Where do you sit today?</h3>
           <div style={{ maxWidth: "700px", margin: "0 auto", position: "relative", paddingTop: "40px" }}>
@@ -118,7 +119,6 @@ function Impact({ onGoLogin, onGoSignup, onGoLanding, onGoHowItWorks }) {
           </div>
         </section>
 
-        {/* CTA */}
         <section style={{ textAlign: "center", padding: "24px 0" }}>
           <button onClick={onGoSignup} className="imp-glow-green" style={{ background: "#4edea3", color: "#003824", padding: "20px 48px", borderRadius: "999px", fontWeight: 700, fontSize: "18px", border: "none", cursor: "pointer", fontFamily: "'Inter',sans-serif" }}>
             Start Tracking Your Impact →
