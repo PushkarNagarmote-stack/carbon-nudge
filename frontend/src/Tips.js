@@ -47,12 +47,13 @@ function Tips({ log, totalCo2 }) {
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         @keyframes fadeSlideIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes glowPulse { 0%, 100% { box-shadow: 0 0 0 rgba(78,222,163,0); } 50% { box-shadow: 0 0 18px rgba(78,222,163,0.25); } }
+        .ai-tips-btn:focus-visible { outline: 2px solid #4edea3; outline-offset: 2px; }
       `}</style>
 
       {/* Header */}
       <div style={{ marginBottom: "28px" }}>
         <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "8px" }}>
-          <div style={{ width: "40px", height: "40px", background: "rgba(78,222,163,0.12)", borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "20px" }}>💡</div>
+          <div aria-hidden="true" style={{ width: "40px", height: "40px", background: "rgba(78,222,163,0.12)", borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "20px" }}>💡</div>
           <h1 style={{ fontSize: "24px", fontWeight: 800, color: "#e5e2e1", letterSpacing: "-0.01em" }}>Sustainability Tips</h1>
         </div>
         <p style={{ color: "rgba(187,202,191,0.6)", fontSize: "14px", marginLeft: "52px" }}>
@@ -62,25 +63,31 @@ function Tips({ log, totalCo2 }) {
 
       {/* AI Button */}
       <button
+        className="ai-tips-btn"
         onClick={getAiTips}
         disabled={loading}
+        aria-busy={loading}
         style={{ width: "100%", padding: "14px", background: loading ? "rgba(78,222,163,0.1)" : "linear-gradient(135deg, #4edea3, #10b981)", color: loading ? "#4edea3" : "#003824", fontSize: "15px", fontWeight: 700, border: loading ? "1px solid rgba(78,222,163,0.3)" : "none", borderRadius: "12px", cursor: loading ? "not-allowed" : "pointer", fontFamily: "'Inter',sans-serif", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", marginBottom: "24px", transition: "all 0.3s", boxShadow: loading ? "none" : "0 0 20px rgba(78,222,163,0.25)" }}
       >
         {loading ? (
           <>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ animation: "spin 1s linear infinite" }}><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" opacity=".3"/><path d="M21 12a9 9 0 00-9-9"/></svg>
+            <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ animation: "spin 1s linear infinite" }}><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" opacity=".3"/><path d="M21 12a9 9 0 00-9-9"/></svg>
             Getting personalized tips...
           </>
         ) : (
           <>
-            <span style={{ fontSize: "18px" }}>✨</span>
+            <span aria-hidden="true" style={{ fontSize: "18px" }}>✨</span>
             {aiTips ? "Refresh AI Tips" : "Get AI-Personalized Tips"}
           </>
         )}
       </button>
 
       {error && (
-        <div style={{ background: "rgba(255,107,107,0.08)", border: "1px solid rgba(255,107,107,0.2)", borderRadius: "10px", padding: "12px 16px", marginBottom: "20px", color: "#ff6b6b", fontSize: "14px" }}>
+        <div
+          role="alert"
+          aria-live="assertive"
+          style={{ background: "rgba(255,107,107,0.08)", border: "1px solid rgba(255,107,107,0.2)", borderRadius: "10px", padding: "12px 16px", marginBottom: "20px", color: "#ff6b6b", fontSize: "14px" }}
+        >
           {error}
         </div>
       )}
@@ -90,11 +97,11 @@ function Tips({ log, totalCo2 }) {
         <span style={{ fontSize: "12px", fontWeight: 700, color: aiTips ? "#4edea3" : "rgba(187,202,191,0.4)", letterSpacing: "0.1em", textTransform: "uppercase", transition: "color 0.3s" }}>
           {aiTips ? "✨ Personalized for you" : "General Tips"}
         </span>
-        <div style={{ flex: 1, height: "1px", background: aiTips ? "rgba(78,222,163,0.2)" : "rgba(255,255,255,0.05)", transition: "background 0.3s" }} />
+        <div aria-hidden="true" style={{ flex: 1, height: "1px", background: aiTips ? "rgba(78,222,163,0.2)" : "rgba(255,255,255,0.05)", transition: "background 0.3s" }} />
       </div>
 
       {/* Tips Grid */}
-      <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+      <div aria-live="polite" style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
         {displayTips.map((tip, i) => (
           <div
             key={`${aiTips ? "ai" : "static"}-${i}`}
@@ -114,7 +121,7 @@ function Tips({ log, totalCo2 }) {
             onMouseEnter={e => { e.currentTarget.style.background = aiTips ? "rgba(78,222,163,0.08)" : "rgba(255,255,255,0.05)"; }}
             onMouseLeave={e => { e.currentTarget.style.background = aiTips ? "rgba(78,222,163,0.04)" : "rgba(255,255,255,0.03)"; }}
           >
-            <div style={{ width: "44px", height: "44px", background: `${tip.color || "#4edea3"}20`, border: `1px solid ${tip.color || "#4edea3"}40`, borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "22px", flexShrink: 0 }}>
+            <div aria-hidden="true" style={{ width: "44px", height: "44px", background: `${tip.color || "#4edea3"}20`, border: `1px solid ${tip.color || "#4edea3"}40`, borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "22px", flexShrink: 0 }}>
               {tip.emoji || tip.icon}
             </div>
             <div>
@@ -127,7 +134,7 @@ function Tips({ log, totalCo2 }) {
 
       {/* Footer note */}
       <div style={{ marginTop: "28px", padding: "16px", background: "rgba(78,222,163,0.04)", border: "1px solid rgba(78,222,163,0.1)", borderRadius: "12px", display: "flex", gap: "12px", alignItems: "flex-start" }}>
-        <span style={{ fontSize: "18px", flexShrink: 0 }}>🌱</span>
+        <span aria-hidden="true" style={{ fontSize: "18px", flexShrink: 0 }}>🌱</span>
         <p style={{ fontSize: "13px", color: "rgba(187,202,191,0.6)", lineHeight: 1.6 }}>
           Small consistent changes add up. Even reducing your footprint by 10% can save hundreds of kg of CO₂ per year.
         </p>

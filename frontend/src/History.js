@@ -67,6 +67,8 @@ function History({ log, totalCo2 }) {
     : "0.0";
   // const monthlyCo2 = (parseFloat(weeklyAvg) * 30).toFixed(1);
 
+  const chartSummary = `Bar chart of daily CO2 emissions this week. Total: ${totalCo2.toFixed(1)} kilograms. Daily average: ${weeklyAvg} kilograms, compared to a typical average of ${avgFootprint} kilograms.`;
+
   return (
     <>
       <style>{`
@@ -76,6 +78,7 @@ function History({ log, totalCo2 }) {
         .log-row { transition: all 0.2s; }
         .log-row:hover { background: rgba(255,255,255,0.04); border-color: rgba(78,222,163,0.2) !important; }
         .filter-btn { transition: all 0.2s; cursor: pointer; border: none; font-family: 'Inter', sans-serif; }
+        .filter-btn:focus-visible { outline: 2px solid #4edea3; outline-offset: 2px; }
       `}</style>
 
       <div style={{ padding:'24px 20px', maxWidth:'800px', margin:'0 auto' }}>
@@ -83,7 +86,7 @@ function History({ log, totalCo2 }) {
         {/* Header */}
         <div style={{ marginBottom:'28px' }}>
           <div style={{ display:'flex', alignItems:'center', gap:'8px', marginBottom:'6px' }}>
-            <span className="material-symbols-outlined" style={{ color:'#4edea3', fontSize:'22px' }}>history</span>
+            <span className="material-symbols-outlined" aria-hidden="true" style={{ color:'#4edea3', fontSize:'22px' }}>history</span>
             <h1 style={{ fontSize:'28px', fontWeight:800, color:'#e5e2e1', letterSpacing:'-0.02em' }}>History</h1>
           </div>
           <p style={{ color:'#bbcabf', fontSize:'15px' }}>Your carbon footprint over time</p>
@@ -100,22 +103,26 @@ function History({ log, totalCo2 }) {
             <div style={{ textAlign:'right' }}>
               <div style={{ fontSize:'32px', fontWeight:800, color:'#4edea3', letterSpacing:'-0.02em', lineHeight:1 }}>{totalCo2.toFixed(1)} <span style={{ fontSize:'14px', fontWeight:400, color:'#bbcabf' }}>kg CO₂</span></div>
               <div style={{ display:'inline-flex', alignItems:'center', gap:'4px', marginTop:'6px', background: totalCo2 < avgFootprint ? 'rgba(16,185,129,0.15)' : 'rgba(255,107,107,0.15)', color: totalCo2 < avgFootprint ? '#10b981' : '#ff6b6b', border:`1px solid ${totalCo2 < avgFootprint ? 'rgba(16,185,129,0.2)' : 'rgba(255,107,107,0.2)'}`, borderRadius:'6px', padding:'2px 8px', fontSize:'12px', fontWeight:600 }}>
-                <span className="material-symbols-outlined" style={{ fontSize:'14px' }}>{totalCo2 < avgFootprint ? 'trending_down' : 'trending_up'}</span>
+                <span className="material-symbols-outlined" aria-hidden="true" style={{ fontSize:'14px' }}>{totalCo2 < avgFootprint ? 'trending_down' : 'trending_up'}</span>
                 {totalCo2 < avgFootprint ? 'Under average' : 'Over average'}
               </div>
             </div>
           </div>
 
-          <ResponsiveContainer width="100%" height={160}>
-            <BarChart data={weekData} margin={{ top:0, right:0, left:-30, bottom:0 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
-              <XAxis dataKey="day" tick={{ fill:'rgba(187,202,191,0.6)', fontSize:11 }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fill:'rgba(187,202,191,0.6)', fontSize:11 }} axisLine={false} tickLine={false} />
-              <Tooltip content={<CustomTooltip />} />
-              <Bar dataKey="co2" fill="#4edea3" radius={[4,4,0,0]} opacity={0.85} className="bar-glow" />
-              <Bar dataKey="avg" fill="rgba(255,255,255,0.06)" radius={[4,4,0,0]} />
-            </BarChart>
-          </ResponsiveContainer>
+          <div role="img" aria-label={chartSummary}>
+            <div aria-hidden="true">
+              <ResponsiveContainer width="100%" height={160}>
+                <BarChart data={weekData} margin={{ top:0, right:0, left:-30, bottom:0 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
+                  <XAxis dataKey="day" tick={{ fill:'rgba(187,202,191,0.6)', fontSize:11 }} axisLine={false} tickLine={false} />
+                  <YAxis tick={{ fill:'rgba(187,202,191,0.6)', fontSize:11 }} axisLine={false} tickLine={false} />
+                  <Tooltip content={<CustomTooltip />} />
+                  <Bar dataKey="co2" fill="#4edea3" radius={[4,4,0,0]} opacity={0.85} className="bar-glow" />
+                  <Bar dataKey="avg" fill="rgba(255,255,255,0.06)" radius={[4,4,0,0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
           <div style={{ display:'flex', justifyContent:'space-between', marginTop:'8px' }}>
             <span style={{ fontSize:'10px', color:'rgba(187,202,191,0.4)', letterSpacing:'0.1em', textTransform:'uppercase' }}>Mon</span>
             <span style={{ fontSize:'10px', color:'rgba(187,202,191,0.4)', letterSpacing:'0.1em', textTransform:'uppercase' }}>Sun</span>
@@ -132,7 +139,7 @@ function History({ log, totalCo2 }) {
           ].map((s, i) => (
             <div key={i} className="glass-h" style={{ borderRadius:'12px', padding:'16px' }}>
               <div style={{ display:'flex', alignItems:'center', gap:'6px', marginBottom:'10px' }}>
-                <span className="material-symbols-outlined" style={{ color:s.color, fontSize:'16px' }}>{s.icon}</span>
+                <span className="material-symbols-outlined" aria-hidden="true" style={{ color:s.color, fontSize:'16px' }}>{s.icon}</span>
                 <span style={{ fontSize:'10px', color:'#bbcabf', fontWeight:600, letterSpacing:'0.07em' }}>{s.label}</span>
               </div>
               <p style={{ fontSize:'20px', fontWeight:800, color:s.color }}>{s.value}</p>
@@ -144,7 +151,7 @@ function History({ log, totalCo2 }) {
         {Object.keys(categoryTotals).length > 0 && (
           <div className="glass-h" style={{ borderRadius:'16px', padding:'20px', marginBottom:'20px' }}>
             <h3 style={{ fontSize:'15px', fontWeight:700, color:'#e5e2e1', marginBottom:'16px', display:'flex', alignItems:'center', gap:'6px' }}>
-              <span className="material-symbols-outlined" style={{ color:'#ffb95f', fontSize:'18px' }}>donut_small</span>
+              <span className="material-symbols-outlined" aria-hidden="true" style={{ color:'#ffb95f', fontSize:'18px' }}>donut_small</span>
               Category Breakdown
             </h3>
             <div style={{ display:'flex', flexDirection:'column', gap:'10px' }}>
@@ -154,7 +161,7 @@ function History({ log, totalCo2 }) {
                   <div key={cat}>
                     <div style={{ display:'flex', justifyContent:'space-between', marginBottom:'4px' }}>
                       <div style={{ display:'flex', alignItems:'center', gap:'6px' }}>
-                        <span className="material-symbols-outlined" style={{ color: categoryColors[cat] || '#4edea3', fontSize:'16px' }}>{categoryIcons[cat] || 'eco'}</span>
+                        <span className="material-symbols-outlined" aria-hidden="true" style={{ color: categoryColors[cat] || '#4edea3', fontSize:'16px' }}>{categoryIcons[cat] || 'eco'}</span>
                         <span style={{ fontSize:'13px', color:'#e5e2e1', textTransform:'capitalize' }}>{cat}</span>
                       </div>
                       <span style={{ fontSize:'13px', fontWeight:700, color: categoryColors[cat] || '#4edea3' }}>{val.toFixed(2)} kg</span>
@@ -170,9 +177,9 @@ function History({ log, totalCo2 }) {
         )}
 
         {/* Filter Pills */}
-        <div style={{ display:'flex', gap:'8px', marginBottom:'16px', overflowX:'auto', paddingBottom:'4px' }}>
+        <div role="group" aria-label="Filter activities by category" style={{ display:'flex', gap:'8px', marginBottom:'16px', overflowX:'auto', paddingBottom:'4px' }}>
           {[['all','All'],['food','Food'],['travel','Travel'],['energy','Energy']].map(([val, label]) => (
-            <button key={val} className="filter-btn" onClick={() => setFilter(val)}
+            <button key={val} className="filter-btn" onClick={() => setFilter(val)} aria-pressed={filter === val}
               style={{ flexShrink:0, padding:'8px 20px', borderRadius:'999px', fontSize:'12px', fontWeight:600, letterSpacing:'0.05em',
                 background: filter===val ? '#4edea3' : 'rgba(255,255,255,0.04)',
                 color: filter===val ? '#003824' : '#bbcabf',
@@ -186,7 +193,7 @@ function History({ log, totalCo2 }) {
         {/* Activity Log grouped by real date */}
         {filteredLog.length === 0 ? (
           <div className="glass-h" style={{ borderRadius:'16px', padding:'48px', textAlign:'center' }}>
-            <span className="material-symbols-outlined" style={{ fontSize:'48px', color:'rgba(187,202,191,0.2)', display:'block', marginBottom:'12px' }}>inbox</span>
+            <span className="material-symbols-outlined" aria-hidden="true" style={{ fontSize:'48px', color:'rgba(187,202,191,0.2)', display:'block', marginBottom:'12px' }}>inbox</span>
             <p style={{ color:'#bbcabf', fontSize:'15px' }}>No activities logged yet.</p>
           </div>
         ) : (
@@ -203,7 +210,7 @@ function History({ log, totalCo2 }) {
                       <div key={i} className="glass-h log-row" style={{ borderRadius:'14px', padding:'16px', display:'flex', alignItems:'center', justifyContent:'space-between', gap:'12px' }}>
                         <div style={{ display:'flex', alignItems:'center', gap:'14px' }}>
                           <div style={{ width:'48px', height:'48px', borderRadius:'12px', background:'rgba(255,255,255,0.05)', border:'1px solid rgba(255,255,255,0.08)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
-                            <span className="material-symbols-outlined" style={{ color: categoryColors[entry.category] || '#4edea3', fontSize:'22px' }}>{categoryIcons[entry.category] || 'eco'}</span>
+                            <span className="material-symbols-outlined" aria-hidden="true" style={{ color: categoryColors[entry.category] || '#4edea3', fontSize:'22px' }}>{categoryIcons[entry.category] || 'eco'}</span>
                           </div>
                           <div>
                             <p style={{ fontSize:'15px', fontWeight:600, color:'#e5e2e1', marginBottom:'3px' }}>{entry.activity}</p>

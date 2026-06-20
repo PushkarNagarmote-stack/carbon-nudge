@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 
-function ForgotPassword({ onBack }) {
+function ForgotPassword({ onBack, onNavigate }) {
+  const handleBack = onBack || onNavigate;
   const [step, setStep] = useState(1);
   const [email, setEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -52,7 +53,7 @@ function ForgotPassword({ onBack }) {
   return (
     <div style={{ width:'100%', maxWidth:'400px', position:'relative', zIndex:1 }}>
 
-      <button onClick={onBack} style={{ display:'flex', alignItems:'center', gap:'6px', background:'none', border:'none', color:'rgba(187,202,191,0.6)', cursor:'pointer', fontFamily:'Inter, sans-serif', fontSize:'13px', fontWeight:600, marginBottom:'32px', padding:0 }}>
+      <button onClick={handleBack} style={{ display:'flex', alignItems:'center', gap:'6px', background:'none', border:'none', color:'rgba(187,202,191,0.6)', cursor:'pointer', fontFamily:'Inter, sans-serif', fontSize:'13px', fontWeight:600, marginBottom:'32px', padding:0 }}>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="15 18 9 12 15 6"/></svg>
         Back to Login
       </button>
@@ -77,7 +78,7 @@ function ForgotPassword({ onBack }) {
           <div style={{ fontSize:'48px', marginBottom:'16px' }}>🎉</div>
           <p style={{ color:'rgba(187,202,191,0.8)', fontSize:'15px', lineHeight:1.7, marginBottom:'24px' }}>You can now sign in with your new password.</p>
           <button
-            onClick={onBack}
+            onClick={handleBack}
             style={{ width:'100%', padding:'15px', background:'#4edea3', color:'#003824', fontSize:'16px', fontWeight:700, border:'none', borderRadius:'12px', cursor:'pointer', fontFamily:'Inter, sans-serif', boxShadow:'0 0 24px rgba(78,222,163,0.3)' }}
           >
             Go to Sign In
@@ -87,7 +88,11 @@ function ForgotPassword({ onBack }) {
         <div style={{ background:'rgba(255,255,255,0.03)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:'24px', padding:'32px', backdropFilter:'blur(20px)' }}>
 
           {error && (
-            <div style={{ background:'rgba(255,107,107,0.1)', border:'1px solid rgba(255,107,107,0.3)', borderRadius:'10px', padding:'12px 16px', marginBottom:'20px', color:'#ff6b6b', fontSize:'14px' }}>
+            <div
+              role="alert"
+              aria-live="assertive"
+              style={{ background:'rgba(255,107,107,0.1)', border:'1px solid rgba(255,107,107,0.3)', borderRadius:'10px', padding:'12px 16px', marginBottom:'20px', color:'#ff6b6b', fontSize:'14px' }}
+            >
               {error}
             </div>
           )}
@@ -95,8 +100,14 @@ function ForgotPassword({ onBack }) {
           {step === 1 && (
             <>
               <div style={{ marginBottom:'24px' }}>
-                <label style={{ display:'block', fontSize:'11px', fontWeight:700, color:'rgba(187,202,191,0.6)', letterSpacing:'0.08em', textTransform:'uppercase', marginBottom:'8px' }}>Email Address</label>
+                <label
+                  htmlFor="fp-email"
+                  style={{ display:'block', fontSize:'11px', fontWeight:700, color:'rgba(187,202,191,0.6)', letterSpacing:'0.08em', textTransform:'uppercase', marginBottom:'8px' }}
+                >
+                  Email Address
+                </label>
                 <input
+                  id="fp-email"
                   type="email"
                   aria-label="Email address"
                   placeholder="name@email.com"
@@ -121,9 +132,15 @@ function ForgotPassword({ onBack }) {
           {step === 2 && (
             <>
               <div style={{ marginBottom:'18px' }}>
-                <label style={{ display:'block', fontSize:'11px', fontWeight:700, color:'rgba(187,202,191,0.6)', letterSpacing:'0.08em', textTransform:'uppercase', marginBottom:'8px' }}>New Password</label>
+                <label
+                  htmlFor="fp-new-password"
+                  style={{ display:'block', fontSize:'11px', fontWeight:700, color:'rgba(187,202,191,0.6)', letterSpacing:'0.08em', textTransform:'uppercase', marginBottom:'8px' }}
+                >
+                  New Password
+                </label>
                 <div style={{ position:'relative' }}>
                   <input
+                    id="fp-new-password"
                     type={showPassword ? "text" : "password"}
                     aria-label="New password"
                     placeholder="Min. 6 characters"
@@ -142,8 +159,14 @@ function ForgotPassword({ onBack }) {
                 </div>
               </div>
               <div style={{ marginBottom:'24px' }}>
-                <label style={{ display:'block', fontSize:'11px', fontWeight:700, color:'rgba(187,202,191,0.6)', letterSpacing:'0.08em', textTransform:'uppercase', marginBottom:'8px' }}>Confirm Password</label>
+                <label
+                  htmlFor="fp-confirm-password"
+                  style={{ display:'block', fontSize:'11px', fontWeight:700, color:'rgba(187,202,191,0.6)', letterSpacing:'0.08em', textTransform:'uppercase', marginBottom:'8px' }}
+                >
+                  Confirm Password
+                </label>
                 <input
+                  id="fp-confirm-password"
                   type={showPassword ? "text" : "password"}
                   aria-label="Confirm password"
                   placeholder="Repeat your password"
@@ -171,7 +194,8 @@ function ForgotPassword({ onBack }) {
 }
 
 ForgotPassword.propTypes = {
-  onBack: PropTypes.func.isRequired,
+  onBack: PropTypes.func,
+  onNavigate: PropTypes.func,
 };
 
 export default ForgotPassword;
