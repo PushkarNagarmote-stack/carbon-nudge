@@ -105,14 +105,16 @@ def register():
 
     Expects JSON body: { "name": str, "email": str, "password": str }.
 
-    Validates that all fields are present and that the password meets
-    strength requirements (8+ chars, upper, lower, number, special char).
+    Validates that all fields are present, that the email matches a
+    basic email format, and that the password meets strength
+    requirements (8+ chars, upper, lower, number, special char).
     Passwords are hashed with werkzeug before being stored — never
     stored in plain text.
 
     Returns:
         200 with {name, email, joinedAt} on success.
-        400 if fields are missing or password is too weak.
+        400 if fields are missing, email format is invalid, or
+        password is too weak.
         409 if the email is already registered.
     """
     data = request.json
@@ -122,6 +124,10 @@ def register():
 
     if not name or not email or not password:
         return jsonify({"error": "All fields required"}), 400
+
+    # Basic email format validation
+    if not re.match(r'^[^\s@]+@[^\s@]+\.[^\s@]+$', email):
+        return jsonify({"error": "Please enter a valid email address"}), 400
 
     # Strong password validation
     if len(password) < 8:
