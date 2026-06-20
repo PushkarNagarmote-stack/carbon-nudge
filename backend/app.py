@@ -47,6 +47,28 @@ def check_limiter():
         limiter.enabled = True
 
 
+@app.after_request
+def set_security_headers(response):
+    """
+    Attach standard security headers to every response.
+
+    - X-Content-Type-Options: stops browsers from MIME-sniffing a
+      response away from the declared Content-Type, which can prevent
+      certain XSS attacks.
+    - X-Frame-Options: prevents the site from being embedded in an
+      iframe on another domain, protecting against clickjacking.
+    - X-XSS-Protection: legacy header, enables the browser's built-in
+      XSS filter on older browsers that still support it.
+    - Referrer-Policy: limits how much referrer information is sent
+      when navigating away from the site.
+    """
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "DENY"
+    response.headers["X-XSS-Protection"] = "1; mode=block"
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+    return response
+
+
 # --- DATABASE SETUP ---
 def get_db():
     """

@@ -280,11 +280,12 @@ def test_reset_password_weak_password_rejected(client):
 
 
 def test_reset_password_strong_password_accepted(client):
-    res = client.post("/api/register", json={"name": "Reset Test", "email": "resettest@example.com", "password": "OriginalPass1!"})
+    email = unique_email()
+    res = client.post("/api/register", json={"name": "Reset Test", "email": email, "password": "OriginalPass1!"})
     assert res.status_code == 200
-    res2 = client.post("/api/reset-password", json={"email": "resettest@example.com", "new_password": "NewStrongPass2!"})
+    res2 = client.post("/api/reset-password", json={"email": email, "new_password": "NewStrongPass2!"})
     assert res2.status_code == 200
-    login_res = client.post("/api/login", json={"email": "resettest@example.com", "password": "NewStrongPass2!"})
+    login_res = client.post("/api/login", json={"email": email, "password": "NewStrongPass2!"})
     assert login_res.status_code == 200
 # ─── SECURITY ─────────────────────────────────────────────
 def test_sql_injection_login(client):
