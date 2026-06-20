@@ -51,6 +51,7 @@ function HowItWorks({ onGoLogin, onGoSignup, onGoLanding, onGoImpact }) {
         .hiw-glow-border:hover { border-color: rgba(78,222,163,0.4); box-shadow: 0 0 20px rgba(78,222,163,0.1); transform: translateY(-4px); }
         .hiw-nav-link { background: none; border: none; cursor: pointer; font-family: 'Inter',sans-serif; }
         .hiw-corner-glow { position: fixed; width: 40vw; height: 40vw; border-radius: 50%; pointer-events: none; z-index: 0; }
+@media (max-width: 768px) { .hiw-nav-links { display: none !important; } }
       `}</style>
 
       <div className="hiw-corner-glow" style={{ top: "-10vw", left: "-10vw", background: "radial-gradient(circle, rgba(78,222,163,0.08) 0%, transparent 70%)" }} />
@@ -60,7 +61,7 @@ function HowItWorks({ onGoLogin, onGoSignup, onGoLanding, onGoImpact }) {
       <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 50, background: "rgba(10,10,10,0.8)", backdropFilter: "blur(24px)", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
         <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 24px", height: "64px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <button className="hiw-nav-link" onClick={onGoLanding} style={{ fontSize: "20px", fontWeight: 800, color: "#4edea3" }}>Carbon Nudge</button>
-          <div style={{ display: "flex", gap: "32px", alignItems: "center" }}>
+          <div style={{ display: "flex", gap: "32px", alignItems: "center" }} className="hiw-nav-links">
             <button className="hiw-nav-link" onClick={onGoLanding} style={{ color: "#bbcabf", fontWeight: 600, fontSize: "14px" }}>Features</button>
             <button className="hiw-nav-link" style={{ color: "#4edea3", fontWeight: 700, fontSize: "14px", borderBottom: "2px solid #4edea3", paddingBottom: "4px" }}>How it Works</button>
             <button className="hiw-nav-link" onClick={onGoImpact} style={{ color: "#bbcabf", fontWeight: 600, fontSize: "14px" }}>Impact</button>

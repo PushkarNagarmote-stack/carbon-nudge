@@ -11,13 +11,14 @@ function Impact({ onGoLogin, onGoSignup, onGoLanding, onGoHowItWorks }) {
         .imp-nav-link { background: none; border: none; cursor: pointer; font-family: 'Inter',sans-serif; }
         .imp-card:hover { background: rgba(255,255,255,0.05); transform: translateY(-4px); }
         .imp-card { transition: all 0.3s; }
+@media (max-width: 768px) { .imp-nav-links { display: none !important; } }
       `}</style>
 
       {/* Nav */}
       <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 50, background: "rgba(10,10,10,0.8)", backdropFilter: "blur(24px)", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
         <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 24px", height: "64px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <button className="imp-nav-link" onClick={onGoLanding} style={{ fontSize: "20px", fontWeight: 800, color: "#4edea3" }}>Carbon Nudge</button>
-          <div style={{ display: "flex", gap: "32px", alignItems: "center" }}>
+          <div style={{ display: "flex", gap: "32px", alignItems: "center" }} className="imp-nav-links">
             <button className="imp-nav-link" onClick={onGoLanding} style={{ color: "#bbcabf", fontWeight: 600, fontSize: "14px" }}>Features</button>
             <button className="imp-nav-link" onClick={onGoHowItWorks} style={{ color: "#bbcabf", fontWeight: 600, fontSize: "14px" }}>How it Works</button>
             <button className="imp-nav-link" style={{ color: "#4edea3", fontWeight: 700, fontSize: "14px", borderBottom: "2px solid #4edea3", paddingBottom: "4px" }}>Impact</button>
