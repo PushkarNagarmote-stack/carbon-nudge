@@ -6,13 +6,23 @@ from groq import Groq
 from werkzeug.security import generate_password_hash, check_password_hash
 import os, json, re, sqlite3
 from dotenv import load_dotenv
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 from datetime import datetime
 
 
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, origins=["https://carbon-nudge.vercel.app"])
+
+limiter = Limiter(
+    get_remote_address,
+    app=app,
+    default_limits=[],
+    storage_uri="memory://",
+    enabled=not app.config.get("TESTING", False)
+)
 
 # --- DATABASE SETUP ---
 def get_db():
@@ -49,6 +59,7 @@ init_db()
 
 # --- AUTH ROUTES ---
 @app.route("/api/register", methods=["POST"])
+@limiter.limit("5 per minute")
 def register():
     data = request.json
     name = data.get("name")
@@ -76,6 +87,7 @@ def register():
 
 
 @app.route("/api/login", methods=["POST"])
+@limiter.limit("10 per minute")
 def login():
     data = request.json
     email = data.get("email")
