@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import axios from "axios";
 import Login from "./Login";
 import Signup from "./Signup";
@@ -161,8 +161,11 @@ function App() {
   }, []);
 
   const avgFootprint = 4.5;
-  const progressPercent = Math.min((totalCo2 / avgFootprint) * 100, 100);
-  const isUnderAvg = totalCo2 < avgFootprint;
+  const progressPercent = useMemo(
+    () => Math.min((totalCo2 / avgFootprint) * 100, 100),
+    [totalCo2]
+  );
+  const isUnderAvg = useMemo(() => totalCo2 < avgFootprint, [totalCo2]);
 
   const formatNudge = (text) => {
     if (!text) return null;
