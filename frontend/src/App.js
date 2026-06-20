@@ -298,7 +298,11 @@ function App() {
           : <div style={{ width:'60px' }} />}
       </header>
 
-      <main style={{ paddingTop:'60px', paddingBottom:'80px' }}>
+      <a href="#main-content" style={{ position: "absolute", left: "-9999px", top: "0", zIndex: 100, padding: "12px 20px", background: "#4edea3", color: "#003824", fontWeight: 700, borderRadius: "8px", textDecoration: "none" }} onFocus={(e) => { e.target.style.left = "16px"; e.target.style.top = "70px"; }} onBlur={(e) => { e.target.style.left = "-9999px"; }}>
+        Skip to main content
+      </a>
+
+      <main id="main-content" role="main" style={{ paddingTop:'60px', paddingBottom:'80px' }}>
 
         {page === "history" && (
           
@@ -353,17 +357,17 @@ function App() {
                     ))}
                   </div>
                   <div style={{ marginBottom:'14px' }}>
-                    <label style={{ display:'block', fontSize:'11px', fontWeight:700, color:'#bbcabf', marginBottom:'6px', letterSpacing:'0.07em', textTransform:'uppercase' }}>Item</label>
-                    <select className="input-glass" value={item} onChange={(e) => setItem(e.target.value)}>
+                    <label htmlFor="item-select" style={{ display:'block', fontSize:'11px', fontWeight:700, color:'#bbcabf', marginBottom:'6px', letterSpacing:'0.07em', textTransform:'uppercase' }}>Item</label>
+                    <select id="item-select" className="input-glass" value={item} onChange={(e) => setItem(e.target.value)}>
                       <option value="">Select item...</option>
                       {items[category].map((i) => <option key={i} value={i}>{i.charAt(0).toUpperCase()+i.slice(1)}</option>)}
                     </select>
                   </div>
                   <div style={{ marginBottom:'4px' }}>
-                    <label style={{ display:'block', fontSize:'11px', fontWeight:700, color:'#bbcabf', marginBottom:'6px', letterSpacing:'0.07em', textTransform:'uppercase' }}>
+                    <label htmlFor="quantity-input" style={{ display:'block', fontSize:'11px', fontWeight:700, color:'#bbcabf', marginBottom:'6px', letterSpacing:'0.07em', textTransform:'uppercase' }}>
                       Quantity {category==="travel" ? "(km)" : category==="energy" ? "(units)" : "(servings)"}
                     </label>
-                    <input className="input-glass" type="number" min="0.1" step="0.1" value={quantity} onChange={(e) => setQuantity(e.target.value)} />
+                    <input id="quantity-input" className="input-glass" type="number" min="0.1" step="0.1" value={quantity} onChange={(e) => setQuantity(e.target.value)} />
                   </div>
                   <button className="calc-btn" onClick={handleCalculate} disabled={loading}>
                     {loading
@@ -372,7 +376,7 @@ function App() {
                   </button>
                 </div>
 
-                <div className="glass" style={{ borderLeft: result ? '3px solid #4edea3' : '3px solid rgba(5,102,217,0.5)', minHeight:'180px', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center' }}>
+                <div className="glass" role="status" aria-live="polite" style={{ borderLeft: result ? '3px solid #4edea3' : '3px solid rgba(5,102,217,0.5)', minHeight:'180px', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center' }}>
                   <p style={{ fontSize:'11px', fontWeight:700, color:'#bbcabf', letterSpacing:'0.1em', textTransform:'uppercase', marginBottom:'14px' }}>Estimated Impact</p>
                   {result ? (
                     <div className="result-fade" style={{ width:'100%' }}>
