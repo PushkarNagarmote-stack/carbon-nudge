@@ -401,18 +401,31 @@ def reset_password():
 
     Expects JSON body: { "email": str, "new_password": str }.
 
-    The new password is hashed before being stored — never stored in
-    plain text. Does not currently enforce the same strength rules as
-    registration.
+    Enforces the same strength requirements as registration (8+ chars,
+    upper, lower, number, special char). The new password is hashed
+    before being stored — never stored in plain text.
 
     Returns:
         200 with {message} confirming the password was updated.
-        400 if email or new_password is missing.
+        400 if email/new_password is missing or the password is too weak.
     """
     email = request.json.get("email")
     new_password = request.json.get("new_password")
     if not email or not new_password:
         return jsonify({"error": "Email and new password required."}), 400
+
+    # Strong password validation (same rules as registration)
+    if len(new_password) < 8:
+        return jsonify({"error": "Password must be at least 8 characters"}), 400
+    if not re.search(r'[A-Z]', new_password):
+        return jsonify({"error": "Password must contain at least one uppercase letter"}), 400
+    if not re.search(r'[a-z]', new_password):
+        return jsonify({"error": "Password must contain at least one lowercase letter"}), 400
+    if not re.search(r'[0-9]', new_password):
+        return jsonify({"error": "Password must contain at least one number"}), 400
+    if not re.search(r'[!@#$%^&*(),.?":{}|<>]', new_password):
+        return jsonify({"error": "Password must contain at least one special character"}), 400
+
     hashed_password = generate_password_hash(new_password)
     conn = get_db()
     conn.execute("UPDATE users SET password = ? WHERE email = ?", (hashed_password, email))

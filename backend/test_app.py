@@ -270,9 +270,22 @@ def test_reset_password_missing_email(client):
     assert res.status_code == 400
 
 def test_reset_password_nonexistent_user(client):
-    res = client.post("/api/reset-password", json={"email": "ghost@nowhere.com", "new_password": "newpass"})
+    res = client.post("/api/reset-password", json={"email": "ghost@nowhere.com", "new_password": "StrongPass1!"})
     assert res.status_code == 200
 
+
+def test_reset_password_weak_password_rejected(client):
+    res = client.post("/api/reset-password", json={"email": "ghost@nowhere.com", "new_password": "weak"})
+    assert res.status_code == 400
+
+
+def test_reset_password_strong_password_accepted(client):
+    res = client.post("/api/register", json={"name": "Reset Test", "email": "resettest@example.com", "password": "OriginalPass1!"})
+    assert res.status_code == 200
+    res2 = client.post("/api/reset-password", json={"email": "resettest@example.com", "new_password": "NewStrongPass2!"})
+    assert res2.status_code == 200
+    login_res = client.post("/api/login", json={"email": "resettest@example.com", "password": "NewStrongPass2!"})
+    assert login_res.status_code == 200
 # ─── SECURITY ─────────────────────────────────────────────
 def test_sql_injection_login(client):
     res = client.post("/api/login", json={"email": "' DROP TABLE users; --", "password": "x"})
