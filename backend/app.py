@@ -1,3 +1,10 @@
+"""
+Carbon Nudge backend API.
+
+Flask application providing authentication, carbon footprint calculation,
+activity logging, and AI-powered nudges/tips via the Groq API.
+"""
+
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from carbon_data import FOOD_EMISSIONS, TRAVEL_EMISSIONS, ENERGY_EMISSIONS
@@ -23,20 +30,44 @@ limiter = Limiter(
     storage_uri="memory://"
 )
 
+
 @app.before_request
 def check_limiter():
+    """
+    Disable rate limiting during automated tests.
+
+    Runs before every request. If the Flask app is in TESTING mode
+    (set by pytest fixtures), rate limiting is turned off so test
+    suites can make many rapid requests without being throttled.
+    In normal operation, rate limiting stays enabled.
+    """
     if app.config.get("TESTING", False):
         limiter.enabled = False
     else:
         limiter.enabled = True
 
+
 # --- DATABASE SETUP ---
 def get_db():
+    """
+    Open a new SQLite connection to the carbon_nudge database.
+
+    Returns:
+        sqlite3.Connection: a connection with row_factory set to
+        sqlite3.Row so query results can be accessed like dicts.
+    """
     conn = sqlite3.connect("carbon_nudge.db")
     conn.row_factory = sqlite3.Row
     return conn
 
+
 def init_db():
+    """
+    Create the `users` and `activities` tables if they don't exist yet.
+
+    Called once at startup. Safe to call multiple times since it uses
+    CREATE TABLE IF NOT EXISTS.
+    """
     conn = get_db()
     conn.execute("""
         CREATE TABLE IF NOT EXISTS users (
@@ -61,12 +92,29 @@ def init_db():
     conn.commit()
     conn.close()
 
+
 init_db()
+
 
 # --- AUTH ROUTES ---
 @app.route("/api/register", methods=["POST"])
 @limiter.limit("5 per minute")
 def register():
+    """
+    Register a new user account.
+
+    Expects JSON body: { "name": str, "email": str, "password": str }.
+
+    Validates that all fields are present and that the password meets
+    strength requirements (8+ chars, upper, lower, number, special char).
+    Passwords are hashed with werkzeug before being stored — never
+    stored in plain text.
+
+    Returns:
+        200 with {name, email, joinedAt} on success.
+        400 if fields are missing or password is too weak.
+        409 if the email is already registered.
+    """
     data = request.json
     name = data.get("name")
     email = data.get("email")
@@ -107,6 +155,18 @@ def register():
 @app.route("/api/login", methods=["POST"])
 @limiter.limit("10 per minute")
 def login():
+    """
+    Authenticate a user with email and password.
+
+    Expects JSON body: { "email": str, "password": str }.
+
+    Looks up the user by email and verifies the password against the
+    stored hash using werkzeug's check_password_hash.
+
+    Returns:
+        200 with {name, email, joinedAt} on success.
+        401 if the email doesn't exist or the password is wrong.
+    """
     data = request.json
     email = data.get("email")
     password = data.get("password")
@@ -124,6 +184,23 @@ def login():
 # --- ACTIVITY ROUTES ---
 @app.route("/api/calculate", methods=["POST"])
 def calculate():
+    """
+    Calculate the CO2 footprint of a logged activity and generate an AI nudge.
+
+    Expects JSON body: { "category": str, "item": str, "quantity": number,
+    "user_email": str (optional, defaults to "guest") }.
+
+    category must be one of "food", "travel", "energy". item must exist
+    in the corresponding emission factor table in carbon_data.py.
+
+    Looks up the emission factor, multiplies by quantity to get CO2 in kg,
+    calls the Groq-backed get_nudge() to generate a personalized AI
+    response, and stores the activity in the database.
+
+    Returns:
+        200 with {activity, co2_kg, nudge} on success.
+        400 if category/item are missing, invalid, or quantity*factor is 0.
+    """
     data = request.json
     category = data.get("category")
     item = data.get("item")
@@ -165,6 +242,15 @@ def calculate():
 
 @app.route("/api/log", methods=["GET"])
 def get_log():
+    """
+    Get all logged activities for a user, most recent first.
+
+    Query param: user_email (optional, defaults to "guest").
+
+    Returns:
+        200 with {activities: [...]} — a list of activity records as
+        returned by the database, ordered by logged_at descending.
+    """
     user_email = request.args.get("user_email", "guest")
     conn = get_db()
     rows = conn.execute(
@@ -177,6 +263,19 @@ def get_log():
 
 @app.route("/api/summary", methods=["GET"])
 def summary():
+    """
+    Get a total CO2 summary and AI-generated daily summary for a user.
+
+    Query param: user_email (optional, defaults to "guest").
+
+    Sums all logged activities' co2_kg, then calls get_daily_summary()
+    to generate an AI-written recap comparing the user's day to the
+    average footprint.
+
+    Returns:
+        200 with {message} if no activities are logged yet.
+        200 with {total_co2_kg, activities, summary} otherwise.
+    """
     user_email = request.args.get("user_email", "guest")
     conn = get_db()
     rows = conn.execute(
@@ -195,6 +294,18 @@ def summary():
 
 @app.route("/api/reset", methods=["POST"])
 def reset():
+    """
+    Delete all logged activities for a user.
+
+    Expects JSON body: { "user_email": str (optional, defaults to "guest") }.
+
+    This is the only way the activity log is actually cleared — the
+    frontend's "Clear" button calls this route so the deletion persists
+    across page reloads and navigation.
+
+    Returns:
+        200 with {message} confirming the log was cleared.
+    """
     user_email = request.json.get("user_email", "guest")
     conn = get_db()
     conn.execute("DELETE FROM activities WHERE user_email = ?", (user_email,))
@@ -205,6 +316,21 @@ def reset():
 
 @app.route("/api/tips", methods=["POST"])
 def tips():
+    """
+    Generate AI-personalized sustainability tips based on user context.
+
+    Expects JSON body: { "context": str } — a description of the user's
+    logged activities (built by the frontend), or a default message if
+    they haven't logged anything yet.
+
+    Calls Groq's llama-3.3-70b-versatile model with a prompt that forces
+    a JSON array response, then strips any markdown code fences before
+    parsing.
+
+    Returns:
+        200 with a JSON array of tip objects:
+        [{emoji, title, desc, color}, ...]
+    """
     data = request.json
     context = data.get("context", "The user hasn't logged any activities yet.")
 
@@ -230,10 +356,29 @@ Give 3 personalized, specific, actionable tips to reduce their carbon footprint.
 
 @app.route("/api/health", methods=["GET"])
 def health():
+    """
+    Simple health-check endpoint used to confirm the API is running.
+
+    Returns:
+        200 with {status, message}.
+    """
     return jsonify({"status": "running", "message": "Carbon Nudge API is live!"})
+
 
 @app.route("/api/find-account", methods=["POST"])
 def find_account():
+    """
+    Check whether an account exists for a given email.
+
+    Expects JSON body: { "email": str }.
+
+    Used by the "Forgot Password" flow on the frontend as the first
+    step before allowing a password reset.
+
+    Returns:
+        200 with {message} if the account exists.
+        404 with {error} if no account is found for that email.
+    """
     email = request.json.get("email")
     conn = get_db()
     user = conn.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()
@@ -242,8 +387,22 @@ def find_account():
         return jsonify({"error": "No account found with this email."}), 404
     return jsonify({"message": "Account found!"})
 
+
 @app.route("/api/reset-password", methods=["POST"])
 def reset_password():
+    """
+    Reset a user's password after they've confirmed their email exists.
+
+    Expects JSON body: { "email": str, "new_password": str }.
+
+    The new password is hashed before being stored — never stored in
+    plain text. Does not currently enforce the same strength rules as
+    registration.
+
+    Returns:
+        200 with {message} confirming the password was updated.
+        400 if email or new_password is missing.
+    """
     email = request.json.get("email")
     new_password = request.json.get("new_password")
     if not email or not new_password:
@@ -254,6 +413,7 @@ def reset_password():
     conn.commit()
     conn.close()
     return jsonify({"message": "Password updated!"})
+
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
