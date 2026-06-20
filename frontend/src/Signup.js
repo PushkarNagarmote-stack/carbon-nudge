@@ -8,11 +8,20 @@ function Signup({ onSignup, onGoLogin, onGoHome }) {
   const [agreed, setAgreed] = useState(false);
   const [error, setError] = useState("");
 
+  const passwordChecks = {
+    length: password.length >= 8,
+    uppercase: /[A-Z]/.test(password),
+    lowercase: /[a-z]/.test(password),
+    number: /[0-9]/.test(password),
+    special: /[!@#$%^&*(),.?":{}|<>]/.test(password),
+  };
+  const isPasswordStrong = Object.values(passwordChecks).every(Boolean);
+
   const handleSignup = async () => {
   setError("");
   if (!name.trim()) { setError("Please enter your full name."); return; }
   if (!email.trim() || !email.includes("@")) { setError("Please enter a valid email."); return; }
-  if (password.length < 6) { setError("Password must be at least 6 characters."); return; }
+  if (!isPasswordStrong) { setError("Password doesn't meet all requirements below."); return; }
   if (!agreed) { setError("Please agree to the Terms of Service."); return; }
   try {
     const res = await fetch("https://carbon-nudge.onrender.com/api/register", {
@@ -96,25 +105,48 @@ function Signup({ onSignup, onGoLogin, onGoHome }) {
           </div>
 
           <div style={{ marginBottom:"20px" }}>
-            <label style={{ display:"block", fontSize:"11px", fontWeight:700, color:"rgba(187,202,191,0.6)", letterSpacing:"0.08em", textTransform:"uppercase", marginBottom:"8px" }}>Password</label>
+            <label htmlFor="signup-password" style={{ display:"block", fontSize:"11px", fontWeight:700, color:"rgba(187,202,191,0.6)", letterSpacing:"0.08em", textTransform:"uppercase", marginBottom:"8px" }}>Password</label>
             <div style={{ position:"relative" }}>
               <input
+                id="signup-password"
                 type={showPassword ? "text" : "password"}
                 aria-label="Password"
-                placeholder="Min. 6 characters"
+                placeholder="Create a strong password"
                 value={password}
                 onChange={e => setPassword(e.target.value)}
                 style={{ width:"100%", background:"rgba(14,14,14,0.6)", border:"1px solid rgba(255,255,255,0.08)", borderRadius:"12px", padding:"14px 48px 14px 16px", color:"#e5e2e1", fontSize:"15px", fontFamily:"'Inter',sans-serif", outline:"none", boxSizing:"border-box" }}
                 onFocus={e => e.target.style.borderColor = "rgba(78,222,163,0.5)"}
                 onBlur={e => e.target.style.borderColor = "rgba(255,255,255,0.08)"}
               />
-              <button onClick={() => setShowPassword(!showPassword)} aria-label={showPassword ? "Hide password" : "Show password"} style={{ position:"absolute", right:"14px", top:"50%", transform:"translateY(-50%)", background:"none", border:"none", cursor:"pointer", color:"rgba(187,202,191,0.5)", padding:0, display:"flex" }}>
+              <button type="button" onClick={() => setShowPassword(!showPassword)} aria-label={showPassword ? "Hide password" : "Show password"} style={{ position:"absolute", right:"14px", top:"50%", transform:"translateY(-50%)", background:"none", border:"none", cursor:"pointer", color:"rgba(187,202,191,0.5)", padding:0, display:"flex" }}>
                 {showPassword
                   ? <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
                   : <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                 }
               </button>
             </div>
+
+            {password.length > 0 && (
+              <div role="status" aria-live="polite" style={{ marginTop:"10px", display:"flex", flexDirection:"column", gap:"4px" }}>
+                {[
+                  { key: "length", label: "At least 8 characters" },
+                  { key: "uppercase", label: "One uppercase letter" },
+                  { key: "lowercase", label: "One lowercase letter" },
+                  { key: "number", label: "One number" },
+                  { key: "special", label: "One special character (!@#$% etc.)" },
+                ].map(({ key, label }) => (
+                  <div key={key} style={{ display:"flex", alignItems:"center", gap:"6px", fontSize:"12px", color: passwordChecks[key] ? "#4edea3" : "rgba(187,202,191,0.5)" }}>
+                    <span style={{ width:"14px", display:"inline-flex" }}>
+                      {passwordChecks[key]
+                        ? <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#4edea3" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>
+                        : <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="rgba(187,202,191,0.4)" strokeWidth="3"><circle cx="12" cy="12" r="9"/></svg>
+                      }
+                    </span>
+                    {label}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           <div style={{ display:"flex", alignItems:"flex-start", gap:"12px", marginBottom:"24px" }}>
