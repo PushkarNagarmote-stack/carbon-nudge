@@ -177,63 +177,73 @@ function App() {
   // LANDING / MARKETING PAGES
   if (page === "landing")
     return (
-      <Landing
-        onGoLogin={() => setPage("login")}
-        onGoSignup={() => setPage("signup")}
-        onGoHowItWorks={() => setPage("howitworks")}
-        onGoImpact={() => setPage("impact")}
-      />
+      
+        <Landing
+          onGoLogin={() => setPage("login")}
+          onGoSignup={() => setPage("signup")}
+          onGoHowItWorks={() => setPage("howitworks")}
+          onGoImpact={() => setPage("impact")}
+        />
+
     );
   if (page === "howitworks")
     return (
-      <HowItWorks
-        onGoLogin={() => setPage("login")}
-        onGoSignup={() => setPage("signup")}
-        onGoLanding={() => setPage("landing")}
-        onGoImpact={() => setPage("impact")}
-      />
+      
+        <HowItWorks
+          onGoLogin={() => setPage("login")}
+          onGoSignup={() => setPage("signup")}
+          onGoLanding={() => setPage("landing")}
+          onGoImpact={() => setPage("impact")}
+        />
+
     );
   if (page === "impact")
     return (
-      <Impact
-        onGoLogin={() => setPage("login")}
-        onGoSignup={() => setPage("signup")}
-        onGoLanding={() => setPage("landing")}
-        onGoHowItWorks={() => setPage("howitworks")}
-      />
+      
+        <Impact
+          onGoLogin={() => setPage("login")}
+          onGoSignup={() => setPage("signup")}
+          onGoLanding={() => setPage("landing")}
+          onGoHowItWorks={() => setPage("howitworks")}
+        />
+
     );
 
   // AUTH PAGES
   if (page === "login")
   return (
-    <Login
-      onGoHome={() => setPage("landing")}
-      onLogin={(user) => {
-        setCurrentUser(user);
-        setPage("dashboard");
-      }}
-      onGuestLogin={(guestUser) => {
-        localStorage.setItem(
-          "cn_current_user",
-          JSON.stringify(guestUser)
-        );
-        setCurrentUser(guestUser);
-        setPage("dashboard");
-      }}
-      onGoSignup={() => setPage("signup")}
-      onForgotPassword={() => setPage("forgot")}
-    />
+    
+      <Login
+        onGoHome={() => setPage("landing")}
+        onLogin={(user) => {
+          setCurrentUser(user);
+          setPage("dashboard");
+        }}
+        onGuestLogin={(guestUser) => {
+          localStorage.setItem(
+            "cn_current_user",
+            JSON.stringify(guestUser)
+          );
+          setCurrentUser(guestUser);
+          setPage("dashboard");
+        }}
+        onGoSignup={() => setPage("signup")}
+        onForgotPassword={() => setPage("forgot")}
+      />
+
   );
   if (page === "signup")
   return (
-    <Signup
-      onGoHome={() => setPage("landing")}
-      onSignup={(user) => {
-        setCurrentUser(user);
-        setPage("dashboard");
-      }}
-      onGoLogin={() => setPage("login")}
-    />
+    
+      <Signup
+        onGoHome={() => setPage("landing")}
+        onSignup={(user) => {
+          setCurrentUser(user);
+          setPage("dashboard");
+        }}
+        onGoLogin={() => setPage("login")}
+      />
+
   );
   if (page === "forgot") return (
   <div style={{ minHeight:'100vh', background:'#0A0A0A', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', padding:'24px', fontFamily:'Inter, sans-serif', position:'relative', overflow:'hidden' }}>
@@ -241,7 +251,9 @@ function App() {
     <div style={{ position:'fixed', top:'-10%', right:'-5%', width:'40vw', height:'40vw', background:'rgba(78,222,163,0.07)', filter:'blur(120px)', borderRadius:'50%', pointerEvents:'none' }} />
     <div style={{ position:'fixed', bottom:'-10%', left:'-5%', width:'30vw', height:'30vw', background:'rgba(5,102,217,0.06)', filter:'blur(100px)', borderRadius:'50%', pointerEvents:'none' }} />
 
-    <ForgotPassword onBack={() => setPage("login")} />
+    
+      <ForgotPassword onBack={() => setPage("login")} />
+
   </div>
 );
   // MAIN APP
@@ -288,11 +300,23 @@ function App() {
 
       <main style={{ paddingTop:'60px', paddingBottom:'80px' }}>
 
-        {page === "history" && <History log={log} totalCo2={totalCo2} />}
+        {page === "history" && (
+          
+            <History log={log} totalCo2={totalCo2} />
 
-        {page === "tips" && <Tips log={log} totalCo2={totalCo2} />}
+        )}
 
-        {page === "profile" && <Profile log={log} totalCo2={totalCo2} streak={streak} onLogout={() => { setLog([]); setTotalCo2(0); setStreak(0); setCurrentUser(null); setPage("login"); }} />}
+        {page === "tips" && (
+          
+            <Tips log={log} totalCo2={totalCo2} />
+
+        )}
+
+        {page === "profile" && (
+          
+            <Profile log={log} totalCo2={totalCo2} streak={streak} onLogout={() => { setLog([]); setTotalCo2(0); setStreak(0); setCurrentUser(null); setPage("login"); }} />
+
+        )}
 
         {page === "dashboard" && (
           <>
