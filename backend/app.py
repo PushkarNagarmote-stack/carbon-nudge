@@ -127,16 +127,17 @@ def register():
 
     Expects JSON body: { "name": str, "email": str, "password": str }.
 
-    Validates that all fields are present, that the email matches a
-    basic email format, and that the password meets strength
+    Validates that all fields are present, within length limits
+    (name <= 50, email <= 100, password <= 128), that the email matches
+    a basic email format, and that the password meets strength
     requirements (8+ chars, upper, lower, number, special char).
     Passwords are hashed with werkzeug before being stored — never
     stored in plain text.
 
     Returns:
         200 with {name, email, joinedAt} on success.
-        400 if fields are missing, email format is invalid, or
-        password is too weak.
+        400 if fields are missing, too long, email format is invalid,
+        or password is too weak.
         409 if the email is already registered.
     """
     data = request.json
@@ -146,6 +147,13 @@ def register():
 
     if not name or not email or not password:
         return jsonify({"error": "All fields required"}), 400
+
+    if len(name) > 50:
+        return jsonify({"error": "Name must be 50 characters or less"}), 400
+    if len(email) > 100:
+        return jsonify({"error": "Email must be 100 characters or less"}), 400
+    if len(password) > 128:
+        return jsonify({"error": "Password must be 128 characters or less"}), 400
 
     # Basic email format validation
     if not re.match(r'^[^\s@]+@[^\s@]+\.[^\s@]+$', email):
@@ -188,16 +196,26 @@ def login():
 
     Expects JSON body: { "email": str, "password": str }.
 
-    Looks up the user by email and verifies the password against the
-    stored hash using werkzeug's check_password_hash.
+    Validates that both fields are present and within length limits
+    (email <= 100, password <= 128), then looks up the user by email
+    and verifies the password against the stored hash using werkzeug's
+    check_password_hash.
 
     Returns:
         200 with {name, email, joinedAt} on success.
+        400 if email/password is missing or exceeds the length limit.
         401 if the email doesn't exist or the password is wrong.
     """
     data = request.json
     email = data.get("email")
     password = data.get("password")
+
+    if not email or not password:
+        return jsonify({"error": "Email and password are required"}), 400
+    if len(email) > 100:
+        return jsonify({"error": "Email must be 100 characters or less"}), 400
+    if len(password) > 128:
+        return jsonify({"error": "Password must be 128 characters or less"}), 400
 
     conn = get_db()
     user = conn.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()
@@ -219,7 +237,9 @@ def calculate():
     "user_email": str (optional, defaults to "guest") }.
 
     category must be one of "food", "travel", "energy". item must exist
-    in the corresponding emission factor table in carbon_data.py.
+    in the corresponding emission factor table in carbon_data.py and be
+    100 characters or less. quantity must be a number between 0
+    (exclusive) and 100,000.
 
     Looks up the emission factor, multiplies by quantity to get CO2 in kg,
     calls the Groq-backed get_nudge() to generate a personalized AI
@@ -227,16 +247,29 @@ def calculate():
 
     Returns:
         200 with {activity, co2_kg, nudge} on success.
-        400 if category/item are missing, invalid, or quantity*factor is 0.
+        400 if category/item are missing or invalid, item exceeds the
+        length limit, quantity isn't a valid number or is out of range,
+        or quantity*factor is 0.
     """
     data = request.json
     category = data.get("category")
     item = data.get("item")
-    quantity = float(data.get("quantity", 1))
+    quantity_raw = data.get("quantity", 1)
     user_email = data.get("user_email", "guest")
 
     if not category or not item:
         return jsonify({"error": "category and item are required"}), 400
+
+    if len(item) > 100:
+        return jsonify({"error": "Item name must be 100 characters or less"}), 400
+
+    try:
+        quantity = float(quantity_raw)
+    except (ValueError, TypeError):
+        return jsonify({"error": "Quantity must be a valid number"}), 400
+
+    if quantity <= 0 or quantity > 100000:
+        return jsonify({"error": "Quantity must be between 0 and 100,000"}), 400
 
     if category == "food":
         factor = FOOD_EMISSIONS.get(item, 0)
@@ -400,14 +433,24 @@ def find_account():
 
     Expects JSON body: { "email": str }.
 
+    Validates that the email is present and within the length limit
+    (<= 100 characters) before querying the database.
+
     Used by the "Forgot Password" flow on the frontend as the first
     step before allowing a password reset.
 
     Returns:
         200 with {message} if the account exists.
+        400 if email is missing or exceeds the length limit.
         404 with {error} if no account is found for that email.
     """
     email = request.json.get("email")
+
+    if not email:
+        return jsonify({"error": "Email is required"}), 400
+    if len(email) > 100:
+        return jsonify({"error": "Email must be 100 characters or less"}), 400
+
     conn = get_db()
     user = conn.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()
     conn.close()
@@ -423,18 +466,25 @@ def reset_password():
 
     Expects JSON body: { "email": str, "new_password": str }.
 
-    Enforces the same strength requirements as registration (8+ chars,
-    upper, lower, number, special char). The new password is hashed
-    before being stored — never stored in plain text.
+    Validates field presence and length (email <= 100, new_password <= 128)
+    before enforcing the same strength requirements as registration
+    (8+ chars, upper, lower, number, special char). The new password is
+    hashed before being stored — never stored in plain text.
 
     Returns:
         200 with {message} confirming the password was updated.
-        400 if email/new_password is missing or the password is too weak.
+        400 if email/new_password is missing, too long, or the password
+        is too weak.
     """
     email = request.json.get("email")
     new_password = request.json.get("new_password")
     if not email or not new_password:
         return jsonify({"error": "Email and new password required."}), 400
+
+    if len(email) > 100:
+        return jsonify({"error": "Email must be 100 characters or less"}), 400
+    if len(new_password) > 128:
+        return jsonify({"error": "Password must be 128 characters or less"}), 400
 
     # Strong password validation (same rules as registration)
     if len(new_password) < 8:
