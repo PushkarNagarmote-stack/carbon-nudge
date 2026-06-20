@@ -96,6 +96,10 @@ function App() {
   }, [page]);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [page]);
+
+  useEffect(() => {
     if (!result) return;
     const end = result.co2_kg;
     const duration = 800;
@@ -447,7 +451,7 @@ function App() {
         {navItems.map(([p, label, icon]) => {
           const active = page === p;
           return (
-            <button key={p} onClick={() => setPage(p)}
+            <button key={p} onClick={() => { setPage(p); window.scrollTo(0, 0); }}
               style={{ display:'flex', flexDirection:'column', alignItems:'center', color: active ? '#4edea3' : 'rgba(187,202,191,0.6)', background:'none', border:'none', fontSize:'11px', fontWeight:600, gap:'3px', cursor:'pointer', filter: active ? 'drop-shadow(0 0 6px rgba(78,222,163,0.5))' : 'none', fontFamily:'Inter, sans-serif', transition:'all 0.3s' }}>
               <span className="material-symbols-outlined" style={{ fontSize:'22px', fontVariationSettings: active ? "'FILL' 1" : "'FILL' 0" }}>{icon}</span>
               {label}
