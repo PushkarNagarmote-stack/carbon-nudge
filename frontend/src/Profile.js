@@ -124,4 +124,17 @@ function Profile({ log, totalCo2, streak, onLogout }) {
   );
 }
 
+Profile.propTypes = {
+  log: PropTypes.arrayOf(
+    PropTypes.shape({
+      activity: PropTypes.string,
+      co2_kg: PropTypes.number,
+      category: PropTypes.string,
+    })
+  ).isRequired,
+  totalCo2: PropTypes.number.isRequired,
+  streak: PropTypes.number.isRequired,
+  onLogout: PropTypes.func.isRequired,
+};
+
 export default Profile;
