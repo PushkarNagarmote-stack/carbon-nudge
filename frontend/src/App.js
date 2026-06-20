@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import axios from "axios";
 import Login from "./Login";
 import Signup from "./Signup";
@@ -127,7 +127,7 @@ function App() {
       .catch(() => {});
   }, [page, currentUser]);
 
-  const handleCalculate = async () => {
+  const handleCalculate = useCallback(async () => {
     if (!item) { alert("Please select an item!"); return; }
     setLoading(true); setResult(null);
     try {
@@ -141,9 +141,9 @@ function App() {
       if (res.data.co2_kg < 2) setStreak(s => s + 1);
     } catch (err) { alert("Error connecting to backend!"); }
     setLoading(false);
-  };
+  }, [category, item, quantity]);
 
-  const handleClearLog = async () => {
+  const handleClearLog = useCallback(async () => {
     const user = JSON.parse(localStorage.getItem("cn_current_user") || "{}");
     try {
       await axios.post("https://carbon-nudge.onrender.com/api/reset", { user_email: user.email || "guest" });
@@ -154,7 +154,7 @@ function App() {
     } catch (err) {
       alert("Error clearing log on server!");
     }
-  };
+  }, []);
 
   const avgFootprint = 4.5;
   const progressPercent = Math.min((totalCo2 / avgFootprint) * 100, 100);
