@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
 const categoryIcons = { food: "restaurant", travel: "directions_car", energy: "bolt" };
@@ -229,5 +230,18 @@ function History({ log, totalCo2 }) {
     </>
   );
 }
+
+History.propTypes = {
+  log: PropTypes.arrayOf(
+    PropTypes.shape({
+      activity: PropTypes.string,
+      co2_kg: PropTypes.number,
+      category: PropTypes.string,
+      time: PropTypes.string,
+      logged_at: PropTypes.string,
+    })
+  ).isRequired,
+  totalCo2: PropTypes.number.isRequired,
+};
 
 export default History;

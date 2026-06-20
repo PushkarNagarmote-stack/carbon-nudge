@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 
 function Profile({ log, totalCo2, streak, onLogout }) {
   const user = JSON.parse(localStorage.getItem("cn_current_user") || '{"name":"User","email":"user@email.com","joinedAt":"2024-01-01"}');

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 
 function Signup({ onSignup, onGoLogin, onGoHome }) {
   const [name, setName] = useState("");
@@ -179,5 +180,11 @@ function Signup({ onSignup, onGoLogin, onGoHome }) {
     </div>
   );
 }
+
+Signup.propTypes = {
+  onSignup: PropTypes.func.isRequired,
+  onGoLogin: PropTypes.func.isRequired,
+  onGoHome: PropTypes.func.isRequired,
+};
 
 export default Signup;

@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 function Landing({ onGoLogin, onGoSignup, onGoHowItWorks, onGoImpact }) {
   return (
@@ -112,5 +113,12 @@ function Landing({ onGoLogin, onGoSignup, onGoHowItWorks, onGoImpact }) {
     </div>
   );
 }
+
+Landing.propTypes = {
+  onGoLogin: PropTypes.func.isRequired,
+  onGoSignup: PropTypes.func.isRequired,
+  onGoHowItWorks: PropTypes.func.isRequired,
+  onGoImpact: PropTypes.func.isRequired,
+};
 
 export default Landing;

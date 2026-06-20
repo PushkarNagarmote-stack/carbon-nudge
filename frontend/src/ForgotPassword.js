@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 
 function ForgotPassword({ onBack }) {
   const [step, setStep] = useState(1);
@@ -168,5 +169,9 @@ function ForgotPassword({ onBack }) {
     </div>
   );
 }
+
+ForgotPassword.propTypes = {
+  onBack: PropTypes.func.isRequired,
+};
 
 export default ForgotPassword;

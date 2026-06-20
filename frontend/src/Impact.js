@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 function Impact({ onGoLogin, onGoSignup, onGoLanding, onGoHowItWorks }) {
   return (
@@ -132,5 +133,12 @@ function Impact({ onGoLogin, onGoSignup, onGoLanding, onGoHowItWorks }) {
     </div>
   );
 }
+
+Impact.propTypes = {
+  onGoLogin: PropTypes.func.isRequired,
+  onGoSignup: PropTypes.func.isRequired,
+  onGoLanding: PropTypes.func.isRequired,
+  onGoHowItWorks: PropTypes.func.isRequired,
+};
 
 export default Impact;

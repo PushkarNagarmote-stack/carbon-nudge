@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 
 function Tips({ log, totalCo2 }) {
   const [loading, setLoading] = useState(false);
@@ -134,5 +135,16 @@ function Tips({ log, totalCo2 }) {
     </div>
   );
 }
+
+Tips.propTypes = {
+  log: PropTypes.arrayOf(
+    PropTypes.shape({
+      activity: PropTypes.string,
+      co2_kg: PropTypes.number,
+      category: PropTypes.string,
+    })
+  ).isRequired,
+  totalCo2: PropTypes.number.isRequired,
+};
 
 export default Tips;

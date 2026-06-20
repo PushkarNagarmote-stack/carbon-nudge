@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 function HowItWorks({ onGoLogin, onGoSignup, onGoLanding, onGoImpact }) {
   const steps = [
@@ -42,6 +43,12 @@ function HowItWorks({ onGoLogin, onGoSignup, onGoLanding, onGoImpact }) {
       </div>
     </div>
   );
+
+  FactorCard.propTypes = {
+    icon: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    rows: PropTypes.arrayOf(PropTypes.array).isRequired,
+  };
 
   return (
     <div style={{ minHeight: "100vh", background: "#0A0A0A", color: "#e5e2e1", fontFamily: "'Inter',sans-serif", overflowX: "hidden" }}>
@@ -129,5 +136,12 @@ function HowItWorks({ onGoLogin, onGoSignup, onGoLanding, onGoImpact }) {
     </div>
   );
 }
+
+HowItWorks.propTypes = {
+  onGoLogin: PropTypes.func.isRequired,
+  onGoSignup: PropTypes.func.isRequired,
+  onGoLanding: PropTypes.func.isRequired,
+  onGoImpact: PropTypes.func.isRequired,
+};
 
 export default HowItWorks;

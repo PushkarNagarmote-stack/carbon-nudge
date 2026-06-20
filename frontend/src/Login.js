@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 
 function Login({
   onLogin,
@@ -145,5 +146,13 @@ function Login({
     </div>
   );
 }
+
+Login.propTypes = {
+  onLogin: PropTypes.func.isRequired,
+  onGuestLogin: PropTypes.func.isRequired,
+  onGoSignup: PropTypes.func.isRequired,
+  onForgotPassword: PropTypes.func.isRequired,
+  onGoHome: PropTypes.func.isRequired,
+};
 
 export default Login;
