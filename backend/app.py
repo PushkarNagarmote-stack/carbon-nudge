@@ -20,9 +20,15 @@ limiter = Limiter(
     get_remote_address,
     app=app,
     default_limits=[],
-    storage_uri="memory://",
-    enabled=not app.config.get("TESTING", False)
+    storage_uri="memory://"
 )
+
+@app.before_request
+def check_limiter():
+    if app.config.get("TESTING", False):
+        limiter.enabled = False
+    else:
+        limiter.enabled = True
 
 # --- DATABASE SETUP ---
 def get_db():
@@ -68,6 +74,18 @@ def register():
 
     if not name or not email or not password:
         return jsonify({"error": "All fields required"}), 400
+
+    # Strong password validation
+    if len(password) < 8:
+        return jsonify({"error": "Password must be at least 8 characters"}), 400
+    if not re.search(r'[A-Z]', password):
+        return jsonify({"error": "Password must contain at least one uppercase letter"}), 400
+    if not re.search(r'[a-z]', password):
+        return jsonify({"error": "Password must contain at least one lowercase letter"}), 400
+    if not re.search(r'[0-9]', password):
+        return jsonify({"error": "Password must contain at least one number"}), 400
+    if not re.search(r'[!@#$%^&*(),.?":{}|<>]', password):
+        return jsonify({"error": "Password must contain at least one special character"}), 400
 
     hashed_password = generate_password_hash(password)
 
