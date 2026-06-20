@@ -19,25 +19,25 @@ function Signup({ onSignup, onGoLogin, onGoHome }) {
   const isPasswordStrong = Object.values(passwordChecks).every(Boolean);
 
   const handleSignup = async () => {
-  setError("");
-  if (!name.trim()) { setError("Please enter your full name."); return; }
-  if (!email.trim() || !email.includes("@")) { setError("Please enter a valid email."); return; }
-  if (!isPasswordStrong) { setError("Password doesn't meet all requirements below."); return; }
-  if (!agreed) { setError("Please agree to the Terms of Service."); return; }
-  try {
-    const res = await fetch("https://carbon-nudge.onrender.com/api/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, email, password })
-    });
-    const data = await res.json();
-    if (!res.ok) { setError(data.error); return; }
-    localStorage.setItem("cn_current_user", JSON.stringify(data));
-    onSignup(data);
-  } catch {
-    setError("Could not connect to server.");
-  }
-};
+    setError("");
+    if (!name.trim()) { setError("Please enter your full name."); return; }
+    if (!email.trim() || !email.includes("@")) { setError("Please enter a valid email."); return; }
+    if (!isPasswordStrong) { setError("Password doesn't meet all requirements below."); return; }
+    if (!agreed) { setError("Please agree to the Terms of Service."); return; }
+    try {
+      const res = await fetch("https://carbon-nudge.onrender.com/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password })
+      });
+      const data = await res.json();
+      if (!res.ok) { setError(data.error); return; }
+      localStorage.setItem("cn_current_user", JSON.stringify(data));
+      onSignup(data);
+    } catch {
+      setError("Could not connect to server.");
+    }
+  };
 
   return (
     <div style={{ minHeight:"100vh", background:"#0A0A0A", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", padding:"24px", fontFamily:"'Inter',sans-serif", position:"relative", overflow:"hidden" }}>
@@ -72,14 +72,15 @@ function Signup({ onSignup, onGoLogin, onGoHome }) {
         <div style={{ background:"rgba(255,255,255,0.03)", border:"1px solid rgba(255,255,255,0.08)", borderRadius:"24px", padding:"32px", backdropFilter:"blur(20px)" }}>
 
           {error && (
-            <div style={{ background:"rgba(255,107,107,0.1)", border:"1px solid rgba(255,107,107,0.3)", borderRadius:"10px", padding:"12px 16px", marginBottom:"20px", color:"#ff6b6b", fontSize:"14px" }}>
+            <div role="alert" aria-live="assertive" style={{ background:"rgba(255,107,107,0.1)", border:"1px solid rgba(255,107,107,0.3)", borderRadius:"10px", padding:"12px 16px", marginBottom:"20px", color:"#ff6b6b", fontSize:"14px" }}>
               {error}
             </div>
           )}
 
           <div style={{ marginBottom:"18px" }}>
-            <label style={{ display:"block", fontSize:"11px", fontWeight:700, color:"rgba(187,202,191,0.6)", letterSpacing:"0.08em", textTransform:"uppercase", marginBottom:"8px" }}>Full Name</label>
+            <label htmlFor="signup-name" style={{ display:"block", fontSize:"11px", fontWeight:700, color:"rgba(187,202,191,0.6)", letterSpacing:"0.08em", textTransform:"uppercase", marginBottom:"8px" }}>Full Name</label>
             <input
+              id="signup-name"
               type="text"
               aria-label="Full name"
               placeholder="Alex Rivers"
@@ -92,8 +93,9 @@ function Signup({ onSignup, onGoLogin, onGoHome }) {
           </div>
 
           <div style={{ marginBottom:"18px" }}>
-            <label style={{ display:"block", fontSize:"11px", fontWeight:700, color:"rgba(187,202,191,0.6)", letterSpacing:"0.08em", textTransform:"uppercase", marginBottom:"8px" }}>Email Address</label>
+            <label htmlFor="signup-email" style={{ display:"block", fontSize:"11px", fontWeight:700, color:"rgba(187,202,191,0.6)", letterSpacing:"0.08em", textTransform:"uppercase", marginBottom:"8px" }}>Email Address</label>
             <input
+              id="signup-email"
               type="email"
               aria-label="Email address"
               placeholder="name@email.com"

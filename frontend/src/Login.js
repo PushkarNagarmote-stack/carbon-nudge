@@ -58,14 +58,15 @@ function Login({
         <div style={{ background:"rgba(255,255,255,0.03)", border:"1px solid rgba(255,255,255,0.08)", borderRadius:"24px", padding:"32px", backdropFilter:"blur(20px)" }}>
 
           {error && (
-            <div style={{ background:"rgba(255,107,107,0.1)", border:"1px solid rgba(255,107,107,0.3)", borderRadius:"10px", padding:"12px 16px", marginBottom:"20px", color:"#ff6b6b", fontSize:"14px" }}>
+            <div role="alert" aria-live="assertive" style={{ background:"rgba(255,107,107,0.1)", border:"1px solid rgba(255,107,107,0.3)", borderRadius:"10px", padding:"12px 16px", marginBottom:"20px", color:"#ff6b6b", fontSize:"14px" }}>
               {error}
             </div>
           )}
 
           <div style={{ marginBottom:"18px" }}>
-            <label style={{ display:"block", fontSize:"11px", fontWeight:700, color:"rgba(187,202,191,0.6)", letterSpacing:"0.08em", textTransform:"uppercase", marginBottom:"8px" }}>Email Address</label>
+            <label htmlFor="login-email" style={{ display:"block", fontSize:"11px", fontWeight:700, color:"rgba(187,202,191,0.6)", letterSpacing:"0.08em", textTransform:"uppercase", marginBottom:"8px" }}>Email Address</label>
             <input
+              id="login-email"
               type="email"
               aria-label="Email address"
               placeholder="name@email.com"
@@ -80,11 +81,12 @@ function Login({
 
           <div style={{ marginBottom:"24px" }}>
             <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:"8px" }}>
-              <label style={{ fontSize:"11px", fontWeight:700, color:"rgba(187,202,191,0.6)", letterSpacing:"0.08em", textTransform:"uppercase" }}>Password</label>
+              <label htmlFor="login-password" style={{ fontSize:"11px", fontWeight:700, color:"rgba(187,202,191,0.6)", letterSpacing:"0.08em", textTransform:"uppercase" }}>Password</label>
               <button onClick={onForgotPassword} style={{ fontSize:"13px", fontWeight:600, color:"#4edea3", background:"none", border:"none", cursor:"pointer", fontFamily:"'Inter',sans-serif" }}>Forgot password?</button>
             </div>
             <div style={{ position:"relative" }}>
               <input
+                id="login-password"
                 type={showPassword ? "text" : "password"}
                 aria-label="Password"
                 placeholder="••••••••"
